@@ -29,4 +29,5 @@ def get_rest_model_list(request):
     else:
         model_list = Model.objects.filter(name__icontains=keyword)
     body = ResponseBody({"models": model_list})
+
     return Response(body.tojson())
