@@ -1,3 +1,6 @@
+# 프로젝트 관리
+- mattermost board [[link]](http://kms.datacentric.kr:8065/boards/team/eubjp7ni1jnf3pt68mm1ecfrky/bmcxubhosspfi3dt8a9mkekxd4o/vxcgwbkum63rk78xqrga4ws7z4a)
+
 # **목적**
 
 - 딥러닝 학습을 관리하는 플랫폼
