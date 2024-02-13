@@ -1,5 +1,10 @@
 # 프로젝트 관리
-- mattermost board [[link]](http://kms.datacentric.kr:8065/boards/team/eubjp7ni1jnf3pt68mm1ecfrky/bmcxubhosspfi3dt8a9mkekxd4o/vxcgwbkum63rk78xqrga4ws7z4a)
+- 전체관리(mattermost board) [[link]](http://kms.datacentric.kr:8065/boards/team/eubjp7ni1jnf3pt68mm1ecfrky/bmcxubhosspfi3dt8a9mkekxd4o/vxcgwbkum63rk78xqrga4ws7z4a)
+- 기획(Notion) [[link]](https://www.notion.so/202401-AI-069c4e30a08449b496cc789805591a9b?pvs=4)
+- UI/UX(Figma) [[link]](https://www.figma.com/file/MQMyK6EFyINmEhyaFV383I/Untitled?type=design&node-id=0%3A1&mode=design&t=5v7xh4aBYUWYtxvT-1)
+- architecture(Powerpoint) [[link]](https://datacentric01-my.sharepoint.com/:x:/g/personal/handh_datacentric01_onmicrosoft_com/EUQ0I7V74vVCgxWiFxBiNUMBsbaFeYifbjMnOaz2O1ab8w)
+- interface(Excel) [[link]](https://datacentric01-my.sharepoint.com/:x:/g/personal/handh_datacentric01_onmicrosoft_com/EUQ0I7V74vVCgxWiFxBiNUMBsbaFeYifbjMnOaz2O1ab8w)
+- db schema(DB Diagram) [[link]](https://dbdiagram.io/d/NothingAI-65c081e7ac844320ae70c22c)
 
 # **목적**
 
