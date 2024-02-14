@@ -4,7 +4,10 @@ from rest_framework.response import Response
 
 
 class Message:
-    REQUIRED_VALUE = 1
+    """
+    응답 전문에 대한 메시지 관리 (향후 DB로 전환 필요)
+    """
+    REQUIRED_FIELD = 1
     HTTP_200_OK = status.HTTP_200_OK
     HTTP_400_BAD_REQUEST = status.HTTP_400_BAD_REQUEST
     HTTP_404_NOT_FOUND = status.HTTP_404_NOT_FOUND
@@ -15,7 +18,7 @@ class Message:
         HTTP_400_BAD_REQUEST: "Bad request.",
         HTTP_404_NOT_FOUND: "Resource not found.",
         HTTP_500_INTERNAL_SERVER_ERROR: "Internal service error.",
-        REQUIRED_VALUE: "'{}' value is required."
+        REQUIRED_FIELD: "'{}' is a required field."
     }
 
     @classmethod
@@ -30,6 +33,10 @@ class Message:
 
 
 class ResponseBody(object):
+    """
+    응답 바디 관리
+    """
+
     def __init__(self, result=None, code=status.HTTP_200_OK, message=None, detail=''):
         self.code = code
         self.detail = detail

@@ -18,10 +18,11 @@ def common_exception_handler(exc, context):
             code = response.status_code
             message = Message.get(code)
             if message is not None:
-                message = str(exc)
-                detail = ""
-            else:
+                message = message
                 detail = str(exc)
+            else:
+                message = str(exc)
+                detail = ''
         else:
             code = status.HTTP_500_INTERNAL_SERVER_ERROR
             message = Message.get(code)
@@ -30,7 +31,8 @@ def common_exception_handler(exc, context):
         code = status.HTTP_500_INTERNAL_SERVER_ERROR
         message = Message.get(code)
         detail = str(exc)
-        logger.error(exc)
+
+    logger.error(exc)
 
     return ResponseBody(code=code, message=message, detail=detail).response()
 
