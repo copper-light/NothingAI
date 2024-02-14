@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.dashboard.apps.DashboardConfig',
     'apps.training.apps.TrainingConfig',
-    'rest_framework'
+    'apps.ai_models.apps.ModelsConfig',
+    'rest_framework',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,10 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'common.exception.common_exception_handler'
+}
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
