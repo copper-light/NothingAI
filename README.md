@@ -3,7 +3,7 @@
   - 현재 접속 안돼서, Trello 로 대체 [[link]](https://trello.com/invite/b/h7F8zXYm/ATTI7fb0e1b899cbc4d4f86de4d7f6a7b9397124F9B1/ptai)
 - 기획(Notion) [[link]](https://www.notion.so/202401-AI-069c4e30a08449b496cc789805591a9b?pvs=4)
 - UI/UX(Figma) [[link]](https://www.figma.com/file/MQMyK6EFyINmEhyaFV383I/Untitled?type=design&node-id=0%3A1&mode=design&t=5v7xh4aBYUWYtxvT-1)
-- architecture(Powerpoint) [[link]](https://datacentric01-my.sharepoint.com/:x:/g/personal/handh_datacentric01_onmicrosoft_com/EUQ0I7V74vVCgxWiFxBiNUMBsbaFeYifbjMnOaz2O1ab8w)
+- architecture(Powerpoint) [[link]](https://datacentric01-my.sharepoint.com/:p:/g/personal/handh_datacentric01_onmicrosoft_com/EUhZWozzaQBNnpAzqi9lkooBp5nGKC2xW9PL_mL8JaGs7g)
 - interface(Excel) [[link]](https://datacentric01-my.sharepoint.com/:x:/g/personal/handh_datacentric01_onmicrosoft_com/EUQ0I7V74vVCgxWiFxBiNUMBsbaFeYifbjMnOaz2O1ab8w)
 - db schema(DB Diagram) [[link]](https://dbdiagram.io/d/NothingAI-65c081e7ac844320ae70c22c)
 
