@@ -19,7 +19,18 @@ def common_exception_handler(exc, context):
             message = Message.get(code)
             if message is not None:
                 message = message
-                detail = str(exc)
+                if code == status.HTTP_400_BAD_REQUEST:
+                    error = exc.detail
+                    field_name = list(error.keys())[0]
+                    error_code = error[field_name][0].code
+                    if error_code == 'blank':
+                        detail = Message.get(Message.INVALID_BLANK_FILED, field_name)
+                    elif error_code == 'required':
+                        detail = Message.get(Message.INVALID_REQUIRED_FIELD, field_name)
+                    else:
+                        detail = ''
+                else:
+                    detail = str(exc)
             else:
                 message = str(exc)
                 detail = ''
@@ -32,7 +43,7 @@ def common_exception_handler(exc, context):
         message = Message.get(code)
         detail = str(exc)
 
-    logger.error(exc)
+    logger.error(str(exc))
 
     return ResponseBody(code=code, message=message, detail=detail).response()
 

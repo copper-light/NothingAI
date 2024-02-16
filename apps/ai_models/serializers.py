@@ -5,5 +5,5 @@ from .models import AIModel
 class AIModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = AIModel
-        fields = ('id', 'name', 'base_model', 'pretraind')
+        fields = ['id', 'name', 'base_model', 'pretraind']
 
