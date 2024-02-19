@@ -22,11 +22,10 @@ get_params = [
 def get_model_list(request):
     # model_list = serializers.serialize('json', Model.objects.all())
     keyword = request.GET.get('keyword', None)
-    print(keyword)
     if keyword is None:
         model_list = list(Model.objects.values())
     else:
-        model_list = list(Model.objects.filter(name__icontains=keyword).values())
+        model_list = list(Model.objects.filter(name__icontains=keyword, description__icontains=keyword).values())
 
     body = ResponseBody({"ai_models": model_list})
     # return HttpResponse(body, content_type="application/json", status=body.getcode())

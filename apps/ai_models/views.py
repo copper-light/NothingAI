@@ -37,7 +37,7 @@ class AIModelViewSet(viewsets.ModelViewSet):
         if keyword is None:
             model_list = self.get_queryset()
         else:
-            model_list = self.get_queryset().filter(name__icontains=keyword).values()
+            model_list = self.get_queryset().filter(name__icontains=keyword, description__icontains=keyword).values()
         model_list = list(model_list)
         serializer = self.get_serializer(model_list, many=True)
         data = {'model': serializer.data}
@@ -72,17 +72,6 @@ class AIModelViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     code = status.HTTP_200_OK
-        # else:
-        #     keys = list(serializer.errors.keys())
-        #     if len(keys) > 0:
-        #         key = list(serializer.errors.keys())[0]
-        #         detail = Message.get(Message.REQUIRED_FIELD, key)
-        #     code = status.HTTP_400_BAD_REQUEST
-        # .data
-        # ResponseBody(code=code, detail=detail).response()
         if 200 <= response.status_code <= 299:
             response.status_code = status.HTTP_200_OK
         return ResponseBody(code=response.status_code).response()
