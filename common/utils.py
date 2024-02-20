@@ -2,7 +2,7 @@ import os
 from django.core.files.storage import FileSystemStorage
 
 
-def save_files(request_files, root_directory='aimodel_files', sub_directory=None, clear_dir=True, overwrite=True):
+def save_files(request_files, root_directory='upload_files', sub_directory=None, clear_dir=True, overwrite=True):
     file_fields = list(request_files.keys())
 
     if sub_directory is not None:
