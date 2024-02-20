@@ -9,6 +9,7 @@ class Message:
     """
     INVALID_REQUIRED_FIELD = 1
     INVALID_BLANK_FILED = 2
+    FAILED_TO_UPLOAD_FILES = 3
     HTTP_200_OK = status.HTTP_200_OK
     HTTP_400_BAD_REQUEST = status.HTTP_400_BAD_REQUEST
     HTTP_404_NOT_FOUND = status.HTTP_404_NOT_FOUND
@@ -20,7 +21,8 @@ class Message:
         HTTP_404_NOT_FOUND: "Resource not found.",
         HTTP_500_INTERNAL_SERVER_ERROR: "Internal service error.",
         INVALID_REQUIRED_FIELD: "'{}' is a required field.",
-        INVALID_BLANK_FILED: "'{}' should not be blank."
+        INVALID_BLANK_FILED: "'{}' should not be blank.",
+        FAILED_TO_UPLOAD_FILES: "Failed to upload files."
     }
 
     @classmethod

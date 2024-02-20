@@ -1,9 +1,12 @@
 from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets, status
+from django.db.models import Q
+from django.db import transaction
 
 from apps.ai_models.models import AIModel
 from apps.ai_models.serializers import AIModelSerializer
 from common.response import ResponseBody, Message
+from common.utils import save_files
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -37,7 +40,9 @@ class AIModelViewSet(viewsets.ModelViewSet):
         if keyword is None:
             model_list = self.get_queryset()
         else:
-            model_list = self.get_queryset().filter(name__icontains=keyword, description__icontains=keyword).values()
+            model_list = (self.get_queryset()
+                          .filter(Q(name__icontains=keyword) | Q(description__icontains=keyword))
+                          .values())
         model_list = list(model_list)
         serializer = self.get_serializer(model_list, many=True)
         data = {'model': serializer.data}
@@ -54,8 +59,16 @@ class AIModelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         detail = ''
         if serializer.is_valid():
+            # 롤백 구문 추가 필요
+            sid = transaction.savepoint()
             serializer.save()
-            code = status.HTTP_200_OK
+            if save_files(request.FILES, sub_directory=serializer.data['id']):
+                code = status.HTTP_200_OK
+                transaction.savepoint_commit(sid)
+            else:
+                code = status.HTTP_500_INTERNAL_SERVER_ERROR
+                detail = Message.get(Message.FAILED_TO_UPLOAD_FILES)
+                transaction.savepoint_rollback(sid)
         else:
             keys = list(serializer.errors.keys())
             if len(keys) > 0:
