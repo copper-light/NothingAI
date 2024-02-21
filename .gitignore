@@ -1,6 +1,11 @@
+# IDE - pycharm
 .idea
-db.sqlite3
+
+# Python
 __pycache__
 *.pyc
 venv
+
+# Application
+db.sqlite3
 upload_files

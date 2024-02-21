@@ -1,3 +1,5 @@
+import os.path
+
 from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets, status
 from django.db.models import Q
@@ -58,24 +60,25 @@ class AIModelViewSet(viewsets.ModelViewSet):
     def create(self, request):
         serializer = self.get_serializer(data=request.data)
         detail = ''
+        data = None
         if serializer.is_valid():
-            # 롤백 구문 추가 필요
-            sid = transaction.savepoint()
             serializer.save()
-            if save_files(request.FILES, sub_directory=serializer.data['id']):
+            object_id = serializer.data['id']
+            if save_files(request.FILES, sub_directory=object_id, clear_dir=True):
                 code = status.HTTP_200_OK
-                transaction.savepoint_commit(sid)
+                data = {'model': {'id': object_id}}
+                self.get_queryset().filter(id=object_id).update(source_uri=f'/{object_id}')
             else:
                 code = status.HTTP_500_INTERNAL_SERVER_ERROR
                 detail = Message.get(Message.FAILED_TO_UPLOAD_FILES)
-                transaction.savepoint_rollback(sid)
+                self.get_queryset().filter(id=object_id).delete()
         else:
             keys = list(serializer.errors.keys())
             if len(keys) > 0:
                 key = list(serializer.errors.keys())[0]
                 detail = Message.get(Message.INVALID_REQUIRED_FIELD, key)
             code = status.HTTP_400_BAD_REQUEST
-        return ResponseBody(code=code, detail=detail).response()
+        return ResponseBody(data, code=code, detail=detail).response()
 
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)

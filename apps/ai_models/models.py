@@ -12,6 +12,8 @@ class AIModel(models.Model):
     run_file_path = models.CharField(max_length=1024, default='./run.py')
     run_options = models.CharField(max_length=1024, null=True)
     weight_file_path = models.CharField(max_length=1024, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name

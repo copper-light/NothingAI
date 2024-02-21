@@ -7,8 +7,9 @@ import logging
 logging.basicConfig(
     format='[%(asctime)s] %(levelname)s: %(message)s',
     level=logging.DEBUG,
-    datefmt='%Y-%d-%m %H:%M:%S',
+    datefmt='%Y-%d-%m %H:%M:%S'
 )
+
 
 def main():
     """Run administrative tasks."""

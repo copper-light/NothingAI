@@ -6,10 +6,6 @@ from common.response import ResponseBody, Message
 
 import logging
 logger = logging.getLogger('common_exception_handler')
-logger.setLevel(logging.DEBUG)
-stream_handler = logging.StreamHandler()
-logger.addHandler(stream_handler)
-
 
 def common_exception_handler(exc, context):
     try:

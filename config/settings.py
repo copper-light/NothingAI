@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.dashboard.apps.DashboardConfig',
-    'apps.training.apps.TrainingConfig',
     'apps.ai_models.apps.ModelsConfig',
+    'apps.experiments.apps.ExperimentsConfig',
     'rest_framework',
     'drf_yasg',
     'corsheaders'
@@ -77,7 +76,8 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'common.exception.common_exception_handler'
+    'EXCEPTION_HANDLER': 'common.exception.common_exception_handler',
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S.%f"
 }
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -118,11 +118,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'Asia/Seoul'
+# TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -135,4 +135,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FILE_UPLOAD_DIR = 'upload_files/'
+FILE_UPLOAD_DIR = BASE_DIR / 'upload_files/'
