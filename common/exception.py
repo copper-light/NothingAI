@@ -10,6 +10,7 @@ logger = logging.getLogger('common_exception_handler')
 
 ERROR_INVALID_RUN_FILE = "not_found_file"
 
+
 def common_exception_handler(exc, context):
     try:
         response = exception_handler(exc, context)
