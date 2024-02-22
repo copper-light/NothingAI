@@ -7,6 +7,9 @@ from common.response import ResponseBody, Message
 import logging
 logger = logging.getLogger('common_exception_handler')
 
+
+ERROR_INVALID_RUN_FILE = "not_found_file"
+
 def common_exception_handler(exc, context):
     try:
         response = exception_handler(exc, context)
@@ -23,8 +26,12 @@ def common_exception_handler(exc, context):
                         detail = Message.get(Message.INVALID_BLANK_FILED, field_name)
                     elif error_code == 'required':
                         detail = Message.get(Message.INVALID_REQUIRED_FIELD, field_name)
+                    elif error_code == 'max_value':
+                        detail = Message.get(Message.INVALID_MAX_VALUE, field_name)
+                    elif error_code == 'not_found_file':
+                        detail = error[field_name][0]
                     else:
-                        detail = ''
+                        detail = f'Undefined error: {error[field_name][0]}'
                 else:
                     detail = str(exc)
             else:

@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class AIModel(models.Model):
+class Model(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(default=False)
     model_type = models.CharField(max_length=10, default='0')

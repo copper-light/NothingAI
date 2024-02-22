@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import AIModel
 
+import common.serializers
+from common.response import Message
+from .models import Model
 
-class AIModelSerializer(serializers.ModelSerializer):
+class ModelSerializer(common.serializers.CommonSerializer):
     class Meta:
-        model = AIModel
+        model = Model
         fields = '__all__'
-
