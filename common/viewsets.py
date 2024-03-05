@@ -8,7 +8,7 @@ from django.db.models import Q
 from common.response import ResponseBody
 
 param_search_keyword = openapi.Parameter(
-    'keyword',
+    'search',
     openapi.IN_QUERY,
     description='This is a keyword for searching models.',
     type=openapi.TYPE_STRING
@@ -22,18 +22,23 @@ class CommonViewSet(viewsets.ModelViewSet):
         return str(self.serializer_class().Meta.model.__name__).lower()
 
     @swagger_auto_schema(manual_parameters=[param_search_keyword])
-    def list(self, request):
-        keyword = request.GET.get('keyword', None)
-        if keyword is None:
-            model_list = self.get_queryset()
-        else:
-            model_list = (self.get_queryset()
-                          .filter(Q(name__icontains=keyword) | Q(description__icontains=keyword))
-                          .values())
-        model_list = list(model_list)
+    def list(self, request, *args, **kwargs):
+        # keyword = request.GET.get('keyword', None)
+        # if keyword is None:
+        #     model_list = self.get_queryset()
+        # else:
+        #     model_list = (self.get_queryset()
+        #                   .filter(Q(name__icontains=keyword) | Q(description__icontains=keyword))
+        #                   .values())
+        # model_list = list(model_list)
+        #
+        # serializer = self.get_serializer(model_list, many=True)
+        # data = {self.get_model_name(): serializer.data}
 
-        serializer = self.get_serializer(model_list, many=True)
-        data = {self.get_model_name(): serializer.data}
+        response = super().list(request, *args, **kwargs)
+        data = {self.get_model_name(): response.data}
+        response.data = ResponseBody(data).to_json()
+
         return ResponseBody(data).response()
 
     def retrieve(self, request, *args, **kwargs):

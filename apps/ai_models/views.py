@@ -1,14 +1,14 @@
 import os.path
 
-from rest_framework.generics import get_object_or_404
-from rest_framework import viewsets, status
-from django.db.models import Q
-from django.db import transaction
+from rest_framework.exceptions import APIException
+from rest_framework import status, filters
+from rest_framework.pagination import LimitOffsetPagination
 
 from apps.ai_models.models import Model
 from apps.ai_models.serializers import ModelSerializer
+from apps.ai_models.services import ModelService
+from common.pagination import CommonPagination
 from common.response import ResponseBody, Message
-from common.utils import save_files
 from common.viewsets import CommonViewSet
 
 from drf_yasg import openapi
@@ -31,6 +31,11 @@ class ModelViewSet(CommonViewSet):
     # renderer_classes = (CommonRenderer,)
     queryset = Model.objects.all()
     serializer_class = ModelSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'description')
+    pagination_class = CommonPagination
+
+    model_service = ModelService
 
     @swagger_auto_schema(request_body=params_create_model)
     def create(self, request):
@@ -39,14 +44,8 @@ class ModelViewSet(CommonViewSet):
         data = None
         code = status.HTTP_200_OK
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            object_id = serializer.data['id']
-            if save_files(request.FILES, sub_directory=object_id, clear_dir=True):
-                data = {'model': {'id': object_id}}
-                self.get_queryset().filter(id=object_id).update(source_uri=f'/{object_id}')
-            else:
-                code = status.HTTP_500_INTERNAL_SERVER_ERROR
-                detail = Message.get(Message.FAILED_TO_UPLOAD_FILES)
-                self.get_queryset().filter(id=object_id).delete()
+            data, error = self.model_service.create_model(serializer, self.get_queryset(), request.FILES)
+            if error is not None:
+                raise APIException(error)
         return ResponseBody(data, code=code, detail=detail).response()
 
