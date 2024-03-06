@@ -27,7 +27,7 @@ class ExperimentViewSet(CommonViewSet):
         print(experiment.model_id.run_file_path.__name__)
         ret = exec_experiment(experiment.model_id.run_file_path, experiment.model_id.source_uri)
         if not ret:
-            err_detail = Message.get(Message.INVALID_RUN_FILE, experiment.model_id.run_file_path)
+            err_detail = Message.INVALID_RUN_FILE.format(experiment.model_id.run_file_path)
             invalided_code = 'not_found_file'
             raise ValidationError(
                 {'run_file_path': [ErrorDetail(err_detail, code=invalided_code)]}

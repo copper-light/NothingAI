@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.ai_models.apps.ModelsConfig',
     'apps.experiments.apps.ExperimentsConfig',
+    'apps.datasets.apps.DatasetsConfig',
     'rest_framework',
     'drf_yasg',
     'corsheaders'

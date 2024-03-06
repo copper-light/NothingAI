@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 import common.serializers
 from common.response import Message
-from .models import Model
+from .models import Dataset
 
 
-class ModelSerializer(common.serializers.CommonSerializer):
+class DatasetSerializer(common.serializers.CommonSerializer):
     class Meta:
-        model = Model
+        model = Dataset
         fields = '__all__'

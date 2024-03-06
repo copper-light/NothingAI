@@ -1,16 +1,16 @@
-from enum import Enum
-
+from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.response import Response
+
+from common.encoder import CommonJSONEncoder
 
 
-class Auto:
-    code = 0
-
-    @classmethod
-    def id(cls):
-        cls.code = cls.code + 1
-        return cls.code
+# class Auto:
+#     code = 0
+#
+#     @classmethod
+#     def id(cls):
+#         cls.code = cls.code + 1
+#         return cls.code
 
 
 class HTTPMessage:
@@ -92,6 +92,6 @@ class ResponseBody(object):
         return res
 
     def response(self):
-        return Response(self.to_json(), status=self.get_code())
+        return JsonResponse(self.to_json(), encoder=CommonJSONEncoder, status=self.get_code())
 
 

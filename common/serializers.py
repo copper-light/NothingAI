@@ -12,7 +12,7 @@ class CommonSerializer(serializers.ModelSerializer):
         if len(keys) > 0:
             messages = []
             for key in keys:
-                messages.append(Message.get(Message.INVALID_REQUIRED_FIELD, key))
+                messages.append(Message.INVALID_REQUIRED_FIELD.format(key))
         else:
             messages = None
         return messages
