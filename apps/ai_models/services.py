@@ -12,15 +12,10 @@ logger = logging.getLogger(__name__)
 class ModelService:
 
     @staticmethod
-    def create_model(serializer: ModelSerializer, queryset, files):
-        serializer.save()
-        object_id = serializer.data['id']
-        data = None
+    def update_files(dataset_id, files):
+        ret = True
         error = None
-        if save_files(files, sub_directory=object_id, clear_dir=True):
-            data = {'model': {'id': object_id}}
-            queryset.filter(id=object_id).update(source_uri=f'/{object_id}')
-        else:
-            queryset.filter(id=object_id).delete()
+        if not save_files(files, sub_directory=dataset_id, clear_dir=True):
+            ret = False
             error = Message.FAILED_TO_UPLOAD_FILES
-        return data, error
+        return ret, error

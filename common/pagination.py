@@ -8,6 +8,7 @@ class CommonPagination(LimitOffsetPagination):
 
     def paginate_queryset(self, queryset, request, view=None):
         self.limit = self.get_limit(request)
+
         if self.limit is None:
             self.limit = self.get_count(queryset)
 

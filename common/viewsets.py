@@ -23,51 +23,36 @@ class CommonViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(manual_parameters=[param_search_keyword])
     def list(self, request, *args, **kwargs):
-        # keyword = request.GET.get('keyword', None)
-        # if keyword is None:
-        #     model_list = self.get_queryset()
-        # else:
-        #     model_list = (self.get_queryset()
-        #                   .filter(Q(name__icontains=keyword) | Q(description__icontains=keyword))
-        #                   .values())
-        # model_list = list(model_list)
-        #
-        # serializer = self.get_serializer(model_list, many=True)
-        # data = {self.get_model_name(): serializer.data}
-
         response = super().list(request, *args, **kwargs)
         data = {self.get_model_name(): response.data}
-        response.data = ResponseBody(data).to_json()
-
+        response.data = ResponseBody(data).get_data()
         return ResponseBody(data).response()
 
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
         data = {self.get_model_name(): response.data}
-        response.data = ResponseBody(data).to_json()
+        response.data = ResponseBody(data).get_data()
         return response
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        detail = ''
-        data = None
-        code = status.HTTP_200_OK
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            object_id = serializer.data['id']
-            data = {self.get_model_name(): {'id': object_id}}
-        return ResponseBody(data, code=code, detail=detail).response()
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        object_id = serializer.data['id']
+        data = {self.get_model_name(): {'id': object_id}}
+        return ResponseBody(data, code=status.HTTP_200_OK, headers=headers).response()
 
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)
         if 200 <= response.status_code <= 299:
             response.status_code = status.HTTP_200_OK
-        response.data = ResponseBody(code=response.status_code).to_json()
+        response.data = ResponseBody(code=response.status_code).get_data()
         return response
 
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
         if 200 <= response.status_code <= 299:
             response.status_code = status.HTTP_200_OK
-        response.data = ResponseBody(code=response.status_code).to_json()
+        response.data = ResponseBody(code=response.status_code).get_data()
         return response
