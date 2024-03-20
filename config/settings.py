@@ -138,3 +138,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 FILE_UPLOAD_DIR = BASE_DIR / 'upload_files/'
+
+MODELS_DIR = FILE_UPLOAD_DIR / 'models/'
+DATASETS_DIR = FILE_UPLOAD_DIR / 'datasets/'

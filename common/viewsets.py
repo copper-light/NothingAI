@@ -6,6 +6,7 @@ from rest_framework import viewsets, status
 from django.db.models import Q
 
 from common.response import ResponseBody
+from common.services import FileService
 
 param_search_keyword = openapi.Parameter(
     'search',
@@ -56,3 +57,37 @@ class CommonViewSet(viewsets.ModelViewSet):
             response.status_code = status.HTTP_200_OK
         response.data = ResponseBody(code=response.status_code).get_data()
         return response
+
+
+class FilesViewSet(CommonViewSet):
+    root_dir = None
+    fileService = FileService
+
+    def get_root_dir(self):
+        return self.root_dir
+
+    def get_service(self):
+        return self.fileService
+
+    def list(self, request, id=None, path='/', *args, **kwargs):
+        # try:
+        ret = self.get_queryset().get(pk=id)
+        files = self.get_service().get_files(id, path, root_directory=self.get_root_dir())
+    #     files = fileService.
+        print(files)
+        #     # serializer = ModelSerializer()
+        # except Model.DoesNotExist:
+        #     raise Http404
+
+        return ResponseBody(files).response()
+
+    def retrieve(self, request, model_id=None, *args, **kwargs):
+        return ResponseBody().response()
+
+    def create(self, request, id=None, *args, **kwargs):
+        # data = request.data
+        files = request.FILES
+
+        self.get_service().save_files(id, files, root_directory=self.get_root_dir())
+
+        return ResponseBody().response()

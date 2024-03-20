@@ -8,6 +8,18 @@ from django.conf import settings
 logger = logging.getLogger('common.utils')
 
 
+def get_files(path, root_directory=settings.FILE_UPLOAD_DIR):
+    path = os.path.join(root_directory, str(path))
+    if not os.path.exists(path):
+        return []
+    files = os.listdir(path)
+    ret = []
+    for file in files:
+        file = os.path.join(path, file)
+        t = 'file' if os.path.isfile(file) else 'dir'
+        ret.append({'filename': file, 'type': t})
+    return ret
+
 def save_files(request_files, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None, clear_dir=False, overwrite=True):
     ret = True
     file_fields = list(request_files.keys())
