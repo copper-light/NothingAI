@@ -1,11 +1,14 @@
 import os.path
 
+from django.http import Http404
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from django.db.models import Q
+from rest_framework.exceptions import ValidationError, APIException
 
-from common.response import ResponseBody
+from common.exception import EXCEPTION_CODE
+from common.response import ResponseBody, Message
 from common.services import FileService
 
 param_search_keyword = openapi.Parameter(
@@ -69,25 +72,92 @@ class FilesViewSet(CommonViewSet):
     def get_service(self):
         return self.fileService
 
-    def list(self, request, id=None, path='/', *args, **kwargs):
-        # try:
+    def retrieve(self, request, id=None, file_path='/', *args, **kwargs):
         ret = self.get_queryset().get(pk=id)
+        if ret is None:
+            raise Http404
+
+        path = file_path.replace('\\', '/')
+        dirs = str.split(path, '/')
+        for d in dirs:
+            if d == '..':
+                return ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
+
         files = self.get_service().get_files(id, path, root_directory=self.get_root_dir())
-    #     files = fileService.
-        print(files)
-        #     # serializer = ModelSerializer()
-        # except Model.DoesNotExist:
-        #     raise Http404
 
-        return ResponseBody(files).response()
+        if files is None:
+            if len(file_path) == 0 or file_path == '/':
+                files = []
+            else:
+                raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
 
-    def retrieve(self, request, model_id=None, *args, **kwargs):
-        return ResponseBody().response()
+        return ResponseBody({'files': files}).response()
+
+    # def retrieve(self, request, model_id=None, *args, **kwargs):
+    #     return ResponseBody().response()
 
     def create(self, request, id=None, *args, **kwargs):
-        # data = request.data
-        files = request.FILES
+        ret = self.get_queryset().get(pk=id)
+        if ret is None:
+            raise Http404
 
-        self.get_service().save_files(id, files, root_directory=self.get_root_dir())
+        files = request.FILES
+        file_fields = list(files.keys())
+        for f in file_fields:
+            f = f.replace('\\', '/')
+            dirs = str.split(f, '/')
+            for d in dirs:
+                if d == '..':
+                    raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [f]})
+
+        try:
+            ret = self.get_service().save_files(id, files, root_directory=self.get_root_dir(), overwrite=False)
+            if ret is False:
+                raise APIException()
+        except FileExistsError as e:
+            raise ValidationError(code=EXCEPTION_CODE.FILE_EXISTS, detail={'path': [e]})
+
+        return ResponseBody().response()
+
+    def partial_update(self, request, id=None, *args, **kwargs):
+        ret = self.get_queryset().get(pk=id)
+        if ret is None:
+            raise Http404
+
+        files = request.FILES
+        file_fields = list(files.keys())
+        for f in file_fields:
+            f = f.replace('\\', '/')
+            dirs = str.split(f, '/')
+            for d in dirs:
+                if d == '..':
+                    raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [f]})
+
+        try:
+            ret = self.get_service().save_files(id, files, root_directory=self.get_root_dir(), overwrite=True)
+            if ret is False:
+                raise APIException()
+        except FileExistsError as e:
+            raise ValidationError(code=EXCEPTION_CODE.FILE_EXISTS, detail={'path': [e]})
+
+        return ResponseBody().response()
+
+    def destroy(self, request, id=None, file_path=None, *args, **kwargs):
+        ret = self.get_queryset().get(pk=id)
+        if ret is None:
+            raise Http404
+
+        path = file_path.replace('\\', '/')
+        dirs = str.split(path, '/')
+        for d in dirs:
+            if d == '..':
+                return ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
+
+        try:
+            ret = self.get_service().rm_files(id, path, root_directory=self.get_root_dir())
+            if ret is None:
+                raise APIException()
+        except FileNotFoundError as e:
+            raise ValidationError(code=EXCEPTION_CODE.NOT_FOUND_FILE, detail={'path': [e]})
 
         return ResponseBody().response()

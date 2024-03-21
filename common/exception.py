@@ -16,6 +16,7 @@ class EXCEPTION_CODE:
     INVALID_FILE_PATH = 'invalid_file_path'
     REQUIRED_FILE = 'required_file'
     NOT_FOUND_FILE = 'not_found_file'
+    FILE_EXISTS = 'file_exists'
 
 
 def common_exception_handler(exc, context):
@@ -38,11 +39,13 @@ def common_exception_handler(exc, context):
                     elif error_code == EXCEPTION_CODE.MAX_VALUE:
                         detail = Message.INVALID_MAX_VALUE.format(field_name)
                     elif error_code == EXCEPTION_CODE.NOT_FOUND_FILE:
-                        detail = error[field_name][0]
+                        detail = Message.NOT_FOUND_FILE.format(error[field_name][0])
                     elif error_code == EXCEPTION_CODE.REQUIRED_FILE:
                         detail = Message.INVALID_REQUIRED_FILES
                     elif error_code == EXCEPTION_CODE.INVALID_FILE_PATH:
                         detail = Message.INVALID_FILE_PATH.format(error[field_name][0])
+                    elif error_code == EXCEPTION_CODE.FILE_EXISTS:
+                        detail = Message.FILE_EXISTS.format(error[field_name][0])
                     else:
                         detail = f'Undefined error: {error[field_name][0]}'
                 else:
@@ -57,7 +60,7 @@ def common_exception_handler(exc, context):
         code = status.HTTP_500_INTERNAL_SERVER_ERROR
         detail = str(exc)
 
-    logger.error(str(exc))
+    logger.error(detail)
 
     return ResponseBody(code=code, message=message, detail=detail).response()
 

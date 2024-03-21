@@ -24,19 +24,19 @@ class CommonSerializer(serializers.ModelSerializer):
         return messages
 
 
-class MultiPartSerializer(CommonSerializer):
-
-    def validate(self, attrs):
-        """
-        Check that the start is before the stop.
-        """
-
-        if self.files is not None:
-            files = list(self.files.keys())
-            if len(files) == 0:
-                raise ValidationError(code=EXCEPTION_CODE.REQUIRED_FILE)
-            else:
-                for file in files:
-                    if file.find("..") != -1:
-                        raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail=file)
-        return attrs
+# class MultiPartSerializer(CommonSerializer):
+#
+#     def validate(self, attrs):
+#         """
+#         Check that the start is before the stop.
+#         """
+#
+#         if self.files is not None:
+#             files = list(self.files.keys())
+#             if len(files) == 0:
+#                 raise ValidationError(code=EXCEPTION_CODE.REQUIRED_FILE)
+#             else:
+#                 for file in files:
+#                     if file.find("..") != -1:
+#                         raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail=file)
+#         return attrs

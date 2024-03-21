@@ -9,3 +9,6 @@ venv
 # Application
 db.sqlite3
 upload_files
+
+# Mac
+.DS_Store

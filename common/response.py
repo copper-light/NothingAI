@@ -49,6 +49,8 @@ class Message:
     INVALID_RUN_FILE = "Run file not found. ({})"
     INVALID_REQUIRED_FILES = "Files for upload are required."
     INVALID_FILE_PATH = "'{}' is an invalid path."
+    FILE_EXISTS = "{} : File already exists."
+    NOT_FOUND_FILE = "{} : No such file or directory"
     # }
 
     # @classmethod
