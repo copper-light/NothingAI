@@ -1,7 +1,7 @@
-from rest_framework import routers
+from common.routers import FileRouter
 from .views import DatasetViewSet
 
-router = routers.SimpleRouter(trailing_slash=False)
+router = FileRouter(trailing_slash=False)
 router.register(r'datasets', DatasetViewSet, basename='datasets')
 
 urlpatterns = router.urls

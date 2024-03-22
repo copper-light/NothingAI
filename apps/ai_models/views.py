@@ -7,7 +7,7 @@ from apps.ai_models.models import Model
 from apps.ai_models.serializers import ModelSerializer
 from common.pagination import CommonPagination
 from common.response import ResponseBody
-from common.viewsets import CommonViewSet, FilesViewSet
+from common.viewsets import CommonViewSet, FileViewSet
 from common.utils import get_files
 from django.conf import settings
 
@@ -26,7 +26,7 @@ params_create_model = openapi.Schema(
 )
 
 
-class ModelViewSet(CommonViewSet):
+class ModelViewSet(FileViewSet):
     # renderer_classes = (CommonRenderer,)
     queryset = Model.objects.all()
     serializer_class = ModelSerializer
@@ -34,6 +34,7 @@ class ModelViewSet(CommonViewSet):
     search_fields = ('name', 'description')
     pagination_class = CommonPagination
     # model_service = ModelService
+    root_dir = settings.MODELS_DIR
 
     # @action(detail=True, methods=['DELETE'], name='delete files')
     # def files(self, request, pk=None, *args, **kwargs):
@@ -61,7 +62,7 @@ class ModelViewSet(CommonViewSet):
     #     return ResponseBody(data, code=code, detail=detail).response()
 
 
-class ModelFilesViewSet(FilesViewSet):
-    queryset = Model.objects.all()
-    serializer_class = ModelSerializer
-    root_dir = settings.MODELS_DIR
+# class ModelFilesViewSet(FilesViewSet):
+#     queryset = Model.objects.all()
+#     serializer_class = ModelSerializer
+#     root_dir = settings.MODELS_DIR

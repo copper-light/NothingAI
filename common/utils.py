@@ -31,20 +31,14 @@ def get_files(path, sub_directory=None, root_directory=settings.FILE_UPLOAD_DIR)
         ret = [
             {'name': os.path.split(path)[1], 'type': 'file', 'created_at': created, 'updated_at': updated, 'size': os.path.getsize(real_path)}
         ]
-        # ret = {
-        #     'created': datetime.datetime.fromtimestamp(os.path.getmtime(real_path)),
-        #     'updated': datetime.datetime.fromtimestamp(os.path.getatime(real_path)),
-        #
-        # }
     else:
         files = os.listdir(real_path)
         ret = []
         for file in files:
-            # rel_path = os.path.join('/', path, file)
             full_path = os.path.join(real_path, file)
 
             if os.path.isfile(full_path):
-                ret.append({'name': file, 'type': 'file', 'created': created, 'updated_at': updated, 'size': os.path.getsize(real_path)})
+                ret.append({'name': file, 'type': 'file', 'created': created, 'updated_at': updated, 'size': os.path.getsize(full_path)})
             else:
                 ret.append({'name': file, 'type': 'dir', 'created': created, 'updated_at': updated, 'size': ''})
 

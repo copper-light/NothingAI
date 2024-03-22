@@ -3,17 +3,14 @@ from rest_framework.routers import BaseRouter, Route, DynamicRoute, SimpleRouter
 
 class FileRouter(SimpleRouter):
 
-    routes = [
+    file_routes = [
         # Detail route.
         Route(
-            url=r'^{prefix}{trailing_slash}$',
+            url=r'^{prefix}/{lookup}/files{trailing_slash}$',
             mapping={
-                'get': 'retrieve',
-                'post': 'create',
-                'patch': 'partial_update'
-                # 'put': 'update',
-                # 'patch': 'partial_update',
-                # 'delete': 'destroy'
+                # 'get': 'retrieve_file',
+                'post': 'create_file',
+                'patch': 'create_file'
             },
             name='{basename}',
             detail=True,
@@ -21,23 +18,15 @@ class FileRouter(SimpleRouter):
         ),
 
         Route(
-            url=r'^{prefix}/(?P<file_path>.*){trailing_slash}$',
+            url=r'^{prefix}/{lookup}/files/(?P<file_path>.*){trailing_slash}$',
             mapping={
-                'get': 'retrieve',
-                'delete': 'destroy'
+                'get': 'retrieve_file',
+                'delete': 'remove_file'
             },
             name='{basename}-detail',
             detail=True,
             initkwargs={'suffix': 'Instance'}
-        ),
-
-        # Dynamically generated detail routes. Generated using
-        # @action(detail=True) decorator on methods of the viewset.
-        # DynamicRoute(
-        #     url=r'^{prefix}/{url_path}{trailing_slash}$',
-        #     name='{basename}-{url_name}',
-        #
-        #     detail=True,
-        #     initkwargs={}
-        # ),
+        )
     ]
+
+    routes = SimpleRouter.routes + file_routes

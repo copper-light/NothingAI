@@ -62,7 +62,7 @@ class CommonViewSet(viewsets.ModelViewSet):
         return response
 
 
-class FilesViewSet(CommonViewSet):
+class FileViewSet(CommonViewSet):
     root_dir = None
     fileService = FileService
 
@@ -72,8 +72,19 @@ class FilesViewSet(CommonViewSet):
     def get_service(self):
         return self.fileService
 
-    def retrieve(self, request, id=None, file_path='/', *args, **kwargs):
-        ret = self.get_queryset().get(pk=id)
+    def destroy(self, request, pk=None, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            try:
+                ret = self.get_service().rm_files(pk, '/', root_directory=self.get_root_dir())
+                if ret is None:
+                    raise APIException()
+            except FileNotFoundError as e:
+                raise ValidationError(code=EXCEPTION_CODE.NOT_FOUND_FILE, detail={'path': [e]})
+        return response
+
+    def retrieve_file(self, request, pk=None, file_path='/', *args, **kwargs):
+        ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404
 
@@ -83,7 +94,7 @@ class FilesViewSet(CommonViewSet):
             if d == '..':
                 return ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
 
-        files = self.get_service().get_files(id, path, root_directory=self.get_root_dir())
+        files = self.get_service().get_files(pk, path, root_directory=self.get_root_dir())
 
         if files is None:
             if len(file_path) == 0 or file_path == '/':
@@ -93,11 +104,8 @@ class FilesViewSet(CommonViewSet):
 
         return ResponseBody({'files': files}).response()
 
-    # def retrieve(self, request, model_id=None, *args, **kwargs):
-    #     return ResponseBody().response()
-
-    def create(self, request, id=None, *args, **kwargs):
-        ret = self.get_queryset().get(pk=id)
+    def create_file(self, request, pk=None, *args, **kwargs):
+        ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404
 
@@ -111,7 +119,8 @@ class FilesViewSet(CommonViewSet):
                     raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [f]})
 
         try:
-            ret = self.get_service().save_files(id, files, root_directory=self.get_root_dir(), overwrite=False)
+            overwrite = (request.method != 'POST')
+            ret = self.get_service().save_files(pk, files, root_directory=self.get_root_dir(), overwrite=overwrite)
             if ret is False:
                 raise APIException()
         except FileExistsError as e:
@@ -119,31 +128,8 @@ class FilesViewSet(CommonViewSet):
 
         return ResponseBody().response()
 
-    def partial_update(self, request, id=None, *args, **kwargs):
-        ret = self.get_queryset().get(pk=id)
-        if ret is None:
-            raise Http404
-
-        files = request.FILES
-        file_fields = list(files.keys())
-        for f in file_fields:
-            f = f.replace('\\', '/')
-            dirs = str.split(f, '/')
-            for d in dirs:
-                if d == '..':
-                    raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [f]})
-
-        try:
-            ret = self.get_service().save_files(id, files, root_directory=self.get_root_dir(), overwrite=True)
-            if ret is False:
-                raise APIException()
-        except FileExistsError as e:
-            raise ValidationError(code=EXCEPTION_CODE.FILE_EXISTS, detail={'path': [e]})
-
-        return ResponseBody().response()
-
-    def destroy(self, request, id=None, file_path=None, *args, **kwargs):
-        ret = self.get_queryset().get(pk=id)
+    def remove_file(self, request, pk=None, file_path=None, *args, **kwargs):
+        ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404
 
@@ -154,7 +140,7 @@ class FilesViewSet(CommonViewSet):
                 return ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
 
         try:
-            ret = self.get_service().rm_files(id, path, root_directory=self.get_root_dir())
+            ret = self.get_service().rm_files(pk, path, root_directory=self.get_root_dir())
             if ret is None:
                 raise APIException()
         except FileNotFoundError as e:
