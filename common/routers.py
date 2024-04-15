@@ -8,7 +8,7 @@ class FileRouter(SimpleRouter):
         Route(
             url=r'^{prefix}/{lookup}/files{trailing_slash}$',
             mapping={
-                # 'get': 'retrieve_file',
+                'get': 'retrieve_file',
                 'post': 'create_file',
                 'patch': 'create_file'
             },

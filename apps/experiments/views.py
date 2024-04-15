@@ -24,7 +24,7 @@ class ExperimentViewSet(CommonViewSet):
     @action(detail=True, methods=['POST'], name='EXEC EXPERIMENT')
     def exec(self, request, pk=None, *args, **kwargs):
         experiment = self.get_queryset().select_related('model_id').get(id=pk)
-        print(experiment.model_id.run_file_path.__name__)
+        print(experiment.model_id.run_file_path)
         ret = exec_experiment(experiment.model_id.run_file_path, experiment.model_id.source_uri)
         if not ret:
             err_detail = Message.INVALID_RUN_FILE.format(experiment.model_id.run_file_path)
