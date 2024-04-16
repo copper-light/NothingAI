@@ -1,13 +1,9 @@
 import logging
-import os
 
-from rest_framework.exceptions import APIException
-
-from apps.ai_models.serializers import ModelSerializer
 from common.response import Message
 from common.utils import save_files, get_files, rm_files
 
-from django.conf import settings
+from config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +30,9 @@ class FileService:
             ret = False
             error = Message.FAILED_TO_UPLOAD_FILES
         return ret, error
+
+    # @staticmethod
+    # def copy_files(resource_id, files, root_directory=settings):
 
     @staticmethod
     def save_models(model_id, files):

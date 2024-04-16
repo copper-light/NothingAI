@@ -2,9 +2,10 @@ import os
 import shutil
 import logging
 import datetime
+from distutils.dir_util import copy_tree
 
 from django.core.files.storage import FileSystemStorage
-from django.conf import settings
+from config import settings
 
 logger = logging.getLogger('common.utils')
 
@@ -29,7 +30,9 @@ def get_files(path, sub_directory=None, root_directory=settings.FILE_UPLOAD_DIR)
 
     if os.path.isfile(real_path):
         ret = [
-            {'name': os.path.split(path)[1], 'type': 'file', 'created_at': created, 'updated_at': updated, 'size': os.path.getsize(real_path)}
+            {
+                'name': os.path.split(path)[1], 'type': 'file',
+                'created_at': created, 'updated_at': updated, 'size': os.path.getsize(real_path)}
         ]
     else:
         files = os.listdir(real_path)
@@ -38,9 +41,15 @@ def get_files(path, sub_directory=None, root_directory=settings.FILE_UPLOAD_DIR)
             full_path = os.path.join(real_path, file)
 
             if os.path.isfile(full_path):
-                ret.append({'name': file, 'type': 'file', 'created': created, 'updated_at': updated, 'size': os.path.getsize(full_path)})
+                ret.append({
+                    'name': file,
+                    'type': 'file',
+                    'created': created, 'updated_at': updated, 'size': os.path.getsize(full_path)})
             else:
-                ret.append({'name': file, 'type': 'dir', 'created': created, 'updated_at': updated, 'size': ''})
+                ret.append({
+                    'name': file,
+                    'type': 'dir',
+                    'created': created, 'updated_at': updated, 'size': ''})
 
     return ret
 
@@ -82,6 +91,7 @@ def save_files(request_files, root_directory=settings.FILE_UPLOAD_DIR, sub_direc
 
     return ret
 
+
 def rm_files(path, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None, force=False):
     if path.startswith('/'):
         path = path[1:]
@@ -106,3 +116,24 @@ def rm_files(path, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None, 
             os.rmdir(real_path)
 
     return True
+
+
+def copy_files(src_path, dst_path, overwrite=False):
+    if not os.path.exists(src_path):
+        raise FileNotFoundError(src_path)
+
+    if overwrite:
+        copy_tree(src_path, dst_path)
+    else:
+        shutil.copytree(src_path, dst_path)
+
+    return True
+
+
+if __name__ == '__main__':
+    d = os.path.join(settings.EXPERIMENTS_DIR, '1')
+    s = '/Users/handh/dev/python/NotingAI/upload_files/models/1'
+
+    copy_files(s, d, overwrite=True)
+    rm_files(d, root_directory='/', force=True)
+

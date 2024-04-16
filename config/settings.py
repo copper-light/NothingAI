@@ -141,3 +141,4 @@ FILE_UPLOAD_DIR = BASE_DIR / 'upload_files/'
 
 MODELS_DIR = FILE_UPLOAD_DIR / 'models/'
 DATASETS_DIR = FILE_UPLOAD_DIR / 'datasets/'
+EXPERIMENTS_DIR = FILE_UPLOAD_DIR / 'experiments/'
