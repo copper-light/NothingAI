@@ -1,11 +1,28 @@
 import subprocess
 import sys
 import os
+from abc import abstractmethod
 
 from apps.experiments.models import Experiment
 from config import settings
 from common.utils import copy_files
 
+
+class ExecService:
+
+    @abstractmethod
+    def prepare_env(self):
+        pass
+
+    @abstractmethod
+    def exec_experiment(self, experiment_name):
+        pass
+
+    @abstractmethod
+    def exec_experiment(self, experiment_name):
+        pass
+
+# class ExecLocalFiles():
 
 def prepare_experiment_env(model_id: int, dataset_id: int, exp_id: int) -> bool:
     # 파일 복사
@@ -20,11 +37,11 @@ def prepare_experiment_env(model_id: int, dataset_id: int, exp_id: int) -> bool:
     return True
 
 
-def exec_experiment(experiement: Experiment, root_dir=settings.EXPERIMENTS_DIR) -> bool:
-    working_dir = os.path.join(root_dir, str(experiement.id))
+def exec_experiment(experiment: Experiment, root_dir=settings.EXPERIMENTS_DIR) -> bool:
+    working_dir = os.path.join(root_dir, str(experiment.id))
     # session = subprocess.run(["python3", run_file], cwd=working_dir, stdout=subprocess.PIPE)
     # print(session)
-    run_file = experiement.model.run_file_path
+    run_file = experiment.model.run_file_path
     if not os.path.exists(os.path.join(working_dir, run_file)):
         return False
 

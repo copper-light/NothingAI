@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.ai_models.apps.ModelsConfig',
     'apps.experiments.apps.ExperimentsConfig',
     'apps.datasets.apps.DatasetsConfig',
+    'apps.training.apps.TrainingConfig',
     'rest_framework',
     'drf_yasg',
     'corsheaders'
