@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'apps.training.apps.TrainingConfig',
     'rest_framework',
     'drf_yasg',
-    'corsheaders'
+    'corsheaders',
+    'django_apscheduler'
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,10 @@ FILE_UPLOAD_DIR = BASE_DIR / 'upload_files/'
 MODELS_DIR = FILE_UPLOAD_DIR / 'models/'
 DATASETS_DIR = FILE_UPLOAD_DIR / 'datasets/'
 EXPERIMENTS_DIR = FILE_UPLOAD_DIR / 'experiments/'
+TASKS_LOG_DIR = FILE_UPLOAD_DIR / 'tasks/'
+TASKS_LOG_FILENAME = 'output.log'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
+
+TASK_POOL_SIZE = 3

@@ -70,3 +70,17 @@ class VISIBILITY(C):
     PUBLIC   = E("Public",   0)
     INTERNAL = E("Internal", 1)
     PRIVATE  = E("Private",  2)
+
+
+class RUN_ENV_TYPE(C):
+    LOCAL      = E("Local",      0)
+    DOCKER     = E("Docker",     1)
+    KUBERNETES = E("Kubernetes", 2)
+
+
+class TASK_STATUS(C):
+    WAIT    = E("Wait",    0)
+    PREPARE = E("Prepare", 1)
+    RUNNING = E("Running", 2)
+    DONE    = E("Done",    3)
+    FAILED  = E("Failed",  4)
