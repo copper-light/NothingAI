@@ -40,18 +40,20 @@ def work():
 
     mgr = TrainingManager.getinstance()
 
-    if not os.environ.get('TrainingManagerInitCheck'):
-        os.environ['TrainingManagerInitCheck'] = 'True'
-        if mgr.task_pool.size() > 0:
-            ids = mgr.task_pool.list()
-            for task_id in ids:
-                runner = LocalRunner(task_id)
-                suspend = runner.is_suspend()
-                if suspend:
-                    mgr.run_task(task_id, run_last_step=True)
-
     queue = mgr.task_queue
     pool = mgr.task_pool
+
+    # 작업이 완료된 task를 pool에서 제거하는 로직에 대한 개선 필요
+    if pool.size() > 0:
+        ids = pool.list()
+        for task_id in ids:
+            runner = LocalRunner(task_id)
+            suspend = runner.is_suspend()
+            if suspend:
+                mgr.run_task(task_id, run_last_step=True)
+            else:
+                if not runner.is_running():
+                    pool.remove_task(task_id)
 
     for task_id in queue.list():
         if pool.empty_size() > 0:
@@ -86,7 +88,7 @@ def process_task(task_id, run_last_step):
     runner.prepare_env()
     runner.exec_task()
     runner.post_task()
-    runner.clear()
+    # runner.clear()
 
 
 class TrainingManager:

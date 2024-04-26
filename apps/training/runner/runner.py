@@ -39,7 +39,8 @@ class Runner(object):
         pass
 
     def post_task(self, *args) -> bool:
-        pass
+        self.task.status = str(C.TASK_STATUS.DONE)
+        self.task.save()
 
     def clear(self) -> bool:
         if self.task:
@@ -107,13 +108,12 @@ class LocalRunner(Runner):
         process = subprocess.Popen(
             ["python3", run_file], cwd=working_dir, stdout=f, stderr=f
         )
-        process.wait()
-        f.write('\n\nFinished: Success')
-        f.close()
-
         task.status = str(C.TASK_STATUS.RUNNING)
         task.process_id = process.pid
         task.save()
+        process.wait()
+        f.write('\n\nFinished: Success')
+        f.close()
 
         # while process.poll() is None:
         #     line = process.stdout.readline()
