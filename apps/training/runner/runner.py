@@ -150,7 +150,7 @@ class LocalRunner(Runner):
         pid = task.process_id
         ret = False
         for process in psutil.process_iter():
-            print(f"is_running {process.pid} == {pid} { str(process.pid) == pid}")
+            # print(f"is_running {process.pid} == {pid} { str(process.pid) == pid}")
             if str(process.pid) == pid:
                 ret = True
                 break

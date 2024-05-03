@@ -42,5 +42,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('apps.ai_models.urls')),
     path('api/v1/', include('apps.datasets.urls')),
-    path('api/v1/', include('apps.experiments.urls'))
+    path('api/v1/', include('apps.experiments.urls')),
+    path('api/v1/', include('apps.training.urls'))
 ]

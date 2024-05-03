@@ -1,7 +1,7 @@
-from django.urls import path
-from . import views
+from rest_framework import routers
+from .views import TaskViewSet
 
-urlpatterns = [
-    path('', views.get_model_list, name='all model'),
-    path('{model_id}', views.models, name='get model')
-]
+router = routers.SimpleRouter(trailing_slash=False)
+router.register('tasks', TaskViewSet)
+
+urlpatterns = router.urls
