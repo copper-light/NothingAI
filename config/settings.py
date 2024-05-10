@@ -144,8 +144,11 @@ FILE_UPLOAD_DIR = BASE_DIR / 'upload_files/'
 MODELS_DIR = FILE_UPLOAD_DIR / 'models/'
 DATASETS_DIR = FILE_UPLOAD_DIR / 'datasets/'
 EXPERIMENTS_DIR = FILE_UPLOAD_DIR / 'experiments/'
-TASKS_LOG_DIR = FILE_UPLOAD_DIR / 'tasks/'
-TASKS_LOG_FILENAME = 'output.log'
+TASKS_LOG_DIR = str(FILE_UPLOAD_DIR / 'tasks/{}/logs/')
+TASKS_ENV_DIR = str(FILE_UPLOAD_DIR / 'tasks/{}/envs/')
+TASKS_RESULT_DIR = str(FILE_UPLOAD_DIR / 'tasks/{}/result/')
+TASKS_LOG_FILENAME = 'output_{}.log'
+TASK_LOG_SIZE = 1000
 
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25

@@ -55,7 +55,7 @@ def work():
                 if not runner.is_running():
                     pool.remove_task(task_id)
 
-    for task_id in queue.list():
+    for _ in queue.list():
         if pool.empty_size() > 0:
             task_id = queue.pop()
             pool.add_task(task_id)
@@ -117,10 +117,9 @@ class TrainingManager:
         task = Task()
         task.experiment_id = experiment_id
         task.save()
-        logger.info(("task_id", task.id))
         # queue에 삽입
+        logger.info(f"Task pushed to the queue: Task ID {task.id}", )
         self.task_queue.push(task.id)
-        logger.info(self.task_queue.size())
 
     def start(self):
         # if self._monitor_thread is not None and self._monitor_thread.is_alive():

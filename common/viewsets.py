@@ -11,21 +11,25 @@ from common.exception import EXCEPTION_CODE
 from common.response import ResponseBody, Message
 from common.services import FileService
 
-param_search_keyword = openapi.Parameter(
-    'search',
-    openapi.IN_QUERY,
-    description='This is a keyword for searching models.',
-    type=openapi.TYPE_STRING
-)
+
 
 
 class CommonViewSet(viewsets.ModelViewSet):
     # renderer_classes = (CommonRenderer,)
 
+    swagger_param_keywords = [
+        openapi.Parameter(
+            'search',
+            openapi.IN_QUERY,
+            description='This is a keyword for searching models.',
+            type=openapi.TYPE_STRING
+        )
+    ]
+
     def get_model_name(self):
         return str(self.serializer_class().Meta.model.__name__).lower()
 
-    @swagger_auto_schema(manual_parameters=[param_search_keyword])
+    @swagger_auto_schema(manual_parameters=swagger_param_keywords)
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         data = {self.get_model_name(): response.data}

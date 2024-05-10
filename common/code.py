@@ -31,8 +31,17 @@ class E:
 
 
 class C:
+    def __init__(self):
+        self.item = {}
+        for key in self.__class__.__dict__.keys():
+            value = str(self.__class__.__dict__[key])
+            self.item[value] = getattr(self.__class__, key)
+
     def __str__(self):
         return self.__class__.__name__.replace("_", " ")
+
+    def __getitem__(self, index):
+        return self.item[str(index)]
 
 
 class ESerializer(BaseSerializer):
@@ -84,3 +93,20 @@ class TASK_STATUS(C):
     RUNNING = E("Running", 2)
     DONE    = E("Done",    3)
     FAILED  = E("Failed",  4)
+
+
+class PYTHON_VERSION(C):
+    PYTHON3_6 = E("python3.6", 0)
+    PYTHON3_7 = E("python3.7", 1)
+    PYTHON3_8 = E("python3.8", 2)
+    PYTHON3_9 = E("python3.9", 3)
+    PYTHON3_10 = E("python3.10", 4)
+    PYTHON3_11 = E("python3.11", 5)
+    PYTHON3_12 = E("python3.12", 6)
+
+
+if __name__ == "__main__":
+    a = PYTHON_VERSION()
+
+    print(a[1].name)
+

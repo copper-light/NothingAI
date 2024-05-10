@@ -25,7 +25,6 @@ class ExperimentViewSet(CommonViewSet):
 
     @action(detail=True, methods=['GET'], name='EXEC EXPERIMENT')
     def exec(self, request, pk=None, *args, **kwargs):
-
         self.manager.add_experiment(pk)
 
         # experiment = self.get_queryset().select_related('model_id').get(id=pk)

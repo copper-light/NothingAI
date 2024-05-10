@@ -12,4 +12,25 @@ sqlparse==0.4.4
 uritemplate==4.1.1
 
 psutil~=5.9.8
-APScheduler~=3.10.4
+APScheduler~=3.10.4APScheduler==3.10.4
+asgiref==3.7.2
+distlib==0.3.8
+Django==5.0.4
+django-apscheduler==0.6.2
+django-cors-headers==4.3.1
+djangorestframework==3.14.0
+drf-yasg==1.21.7
+filelock==3.14.0
+inflection==0.5.1
+packaging==23.2
+platformdirs==4.2.1
+psutil==5.9.8
+pytz==2024.1
+PyYAML==6.0.1
+six==1.16.0
+sqlparse==0.4.4
+tailer==0.4.1
+typing_extensions==4.10.0
+tzlocal==5.2
+uritemplate==4.1.1
+virtualenv==20.26.1
