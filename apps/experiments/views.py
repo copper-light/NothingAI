@@ -9,6 +9,7 @@ from apps.experiments.models import Experiment
 from apps.experiments.serializers import ExperimentSerializer
 from apps.experiments.services import exec_experiment, prepare_experiment_env
 from apps.training.manager.manager import TrainingManager
+from common.pagination import CommonPagination
 
 from common.response import ResponseBody, Message
 from common.viewsets import CommonViewSet
@@ -22,6 +23,8 @@ class ExperimentViewSet(CommonViewSet):
     serializer_class = ExperimentSerializer
 
     manager = TrainingManager.getinstance()
+
+    pagination_class = CommonPagination
 
     @action(detail=True, methods=['GET'], name='EXEC EXPERIMENT')
     def exec(self, request, pk=None, *args, **kwargs):

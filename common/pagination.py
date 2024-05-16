@@ -10,7 +10,7 @@ class CommonPagination(LimitOffsetPagination):
         self.limit = self.get_limit(request)
 
         if self.limit is None:
-            self.limit = self.get_count(queryset)
+            self.limit = 100 #or self.get_count(queryset)
 
         self.count = self.get_count(queryset)
         self.offset = self.get_offset(request)
