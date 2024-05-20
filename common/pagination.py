@@ -28,7 +28,7 @@ class CommonPagination(LimitOffsetPagination):
             ('limit', self.limit),
             ('next', self.get_next_link()),
             ('previous', self.get_previous_link()),
-            ('data', data)
+            ('items', data)
         ]))
 
     def get_paginated_response_schema(self, schema):

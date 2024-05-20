@@ -32,15 +32,15 @@ class CommonViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(manual_parameters=swagger_param_keywords)
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        data = {self.get_model_name(): response.data}
-        response.data = ResponseBody(data).get_data()
-        return ResponseBody(data).response()
+        # data = {self.get_model_name(): response.data}
+        # response.data = ResponseBody(data).get_data()
+        return ResponseBody(response.data).response()
 
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
-        data = {self.get_model_name(): response.data}
-        response.data = ResponseBody(data).get_data()
-        return response
+        # data = {self.get_model_name(): response.data}
+        # response.data = ResponseBody(response.data).get_data()
+        return ResponseBody(response.data).response()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -48,7 +48,7 @@ class CommonViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         object_id = serializer.data['id']
-        data = {self.get_model_name(): {'id': object_id}}
+        data = {'id': object_id}
         return ResponseBody(data, code=status.HTTP_200_OK, headers=headers).response()
 
     def destroy(self, request, *args, **kwargs):
@@ -106,7 +106,7 @@ class FileViewSet(CommonViewSet):
             else:
                 raise ValidationError(code=EXCEPTION_CODE.INVALID_FILE_PATH, detail={'path': [path]})
 
-        return ResponseBody({'files': files}).response()
+        return ResponseBody({'items': files}).response()
 
     def create_file(self, request, pk=None, *args, **kwargs):
         ret = self.get_queryset().get(pk=pk)

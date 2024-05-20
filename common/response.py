@@ -93,7 +93,7 @@ class ResponseBody(object):
     def get_data(self):
         res = {'code': self.code, 'message': self.message, 'detail': self.detail}
         if self.data is not None:
-            res['results'] = self.data
+            res['data'] = self.data
         return res
 
     def response(self):

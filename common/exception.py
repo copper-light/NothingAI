@@ -1,3 +1,4 @@
+from django.views.generic import detail
 from rest_framework.exceptions import APIException
 from rest_framework.views import exception_handler
 from rest_framework import status
@@ -20,6 +21,7 @@ class EXCEPTION_CODE:
 
 
 def common_exception_handler(exc, context):
+    logger.error(str(exc))
     message = None
     try:
         response = exception_handler(exc, context)
@@ -64,3 +66,6 @@ def common_exception_handler(exc, context):
 
     return ResponseBody(code=code, message=message, detail=detail).response()
 
+
+def common_404_handler(request, exception):
+    return ResponseBody(code=status.HTTP_404_NOT_FOUND).response()

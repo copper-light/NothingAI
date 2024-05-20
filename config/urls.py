@@ -20,6 +20,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from common.exception import common_404_handler
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -45,3 +46,5 @@ urlpatterns = [
     path('api/v1/', include('apps.experiments.urls')),
     path('api/v1/', include('apps.training.urls'))
 ]
+
+# handler404 = common_404_handler
