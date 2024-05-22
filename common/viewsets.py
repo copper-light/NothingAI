@@ -1,3 +1,4 @@
+import logging
 import os.path
 
 from django.http import Http404
@@ -84,7 +85,7 @@ class FileViewSet(CommonViewSet):
                 if ret is None:
                     raise APIException()
             except FileNotFoundError as e:
-                raise ValidationError(code=EXCEPTION_CODE.NOT_FOUND_FILE, detail={'path': [e]})
+                logging.debug("empty directory: {}".format(e))
         return response
 
     def retrieve_file(self, request, pk=None, file_path='/', *args, **kwargs):

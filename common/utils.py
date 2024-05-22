@@ -131,6 +131,24 @@ def copy_files(src_path, dst_path, overwrite=False):
 
     return True
 
+def is_exsits_file(path, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None):
+    if path.startswith('/'):
+        path = path[1:]
+
+    if sub_directory is not None:
+        if sub_directory.startswith('/'):
+            sub_directory = sub_directory[1:]
+        base_dir = os.path.join(root_directory, str(sub_directory))
+    else:
+        base_dir = root_directory
+
+    real_path = os.path.join(base_dir, str(path))
+    if not os.path.exists(real_path):
+        return False
+    else:
+        return True
+
+
 
 class TaskLogger:
 
