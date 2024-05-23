@@ -35,11 +35,13 @@ class ModelViewSet(FileViewSet):
     pagination_class = CommonPagination
     # model_service = ModelService
     root_dir = settings.MODELS_DIR
+    select_fields = None
+
 
     # @action(detail=True, methods=['DELETE'], name='delete files')
-    # def files(self, request, pk=None, *args, **kwargs):
-    #
-    #     return None
+    def list(self, request, *args, **kwargs):
+        self.select_fields = ('id', 'name', 'model_type', 'source_type', 'updated_at')
+        return super().list(request, *args, **kwargs)
     #
     # @action(detail=True, methods=['POST'], name='update files')
     # def files(self, request, pk=None, *args, **kwargs):

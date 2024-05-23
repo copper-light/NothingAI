@@ -44,3 +44,7 @@ class ExperimentViewSet(CommonViewSet):
         #     )
 
         return ResponseBody(code=status.HTTP_200_OK).response()
+
+    def list(self, request, *args, **kwargs):
+        self.select_fields = ('id', 'name', 'status', 'model', 'dataset', 'updated_at')
+        return super().list(request, *args, **kwargs)

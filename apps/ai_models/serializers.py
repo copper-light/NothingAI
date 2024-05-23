@@ -9,3 +9,4 @@ class ModelSerializer(common.serializers.CommonSerializer):
     class Meta:
         model = Model
         fields = '__all__'
+

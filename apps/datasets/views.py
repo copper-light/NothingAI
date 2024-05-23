@@ -30,3 +30,7 @@ class DatasetViewSet(FileViewSet):
     search_fields = ('name', 'description')
     pagination_class = CommonPagination
     root_dir = settings.DATASETS_DIR
+
+    def list(self, request, *args, **kwargs):
+        self.select_fields = ('id', 'name', 'storage_type', 'dataset_type', 'updated_at')
+        return super().list(request, *args, **kwargs)

@@ -11,7 +11,13 @@ from common.response import Message
 class CommonSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
+        select_fields = kwargs.pop('fields', None)
         super().__init__(*args, **kwargs)
+
+        if select_fields:
+            default_field = set(self.fields.keys())
+            for f in default_field - set(select_fields):
+                self.fields.pop(f)
 
     def get_err_messages(self):
         keys = list(self.errors.keys())

@@ -17,6 +17,7 @@ from common.services import FileService
 
 class CommonViewSet(viewsets.ModelViewSet):
     # renderer_classes = (CommonRenderer,)
+    select_fields = None
 
     swagger_param_keywords = [
         openapi.Parameter(
@@ -26,6 +27,21 @@ class CommonViewSet(viewsets.ModelViewSet):
             type=openapi.TYPE_STRING
         )
     ]
+
+    def get_queryset(self):
+        if self.select_fields:
+            queryset = self.queryset.only(*self.select_fields)
+            # self.select_fields = None
+        else:
+            queryset = self.queryset
+        return queryset
+
+    def get_serializer(self, *args, **kwargs):
+        fields = self.select_fields
+        if fields:
+            kwargs['fields'] = fields
+
+        return super().get_serializer(*args, **kwargs)
 
     def get_model_name(self):
         return str(self.serializer_class().Meta.model.__name__).lower()
