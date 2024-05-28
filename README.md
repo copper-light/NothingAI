@@ -16,17 +16,6 @@
 - 하나의 플랫폼에 다수의 사용자 또는 다수의 모델을 돌리는 것을 전제로하기 때문에 학습 스케쥴링 관리가 코어 기능이 되어야함
 - 핵심이 개발되어야 모델 관리, 학습 데이터 관리, 데이터 어노테이션으로 확장할 수 있을 것
 
-# 설계 목표
-
-- GUI 없이도 동작가능할 것
-- 모델을 만들되 관리가 가능할 것
-- 모델과 상관 없이 데이터셋 및 프리트레인드 파일만 공유가 가능하도록 할것
-- 지금은 한통으로 만들되 쪼갤것을 고려하여 설계할것
-    - 가장 이상적인 아키는 기능별로 컨테이너로 쪼개는 것이며, 이를 고려해서 설계할 것
-- 최대한 Restful API 표준에 맞춰서 갈 것
-    - 국내 SI를 고려하면 Restful 표준을 따르지 않는것이 좋으나 그때 다시 수정한다고 생각하고 갈 것
-      - 사용하면 안되는 메서드(put,delete,patch)라면, header 에 담아 우회할 수 있음
-
 # 기능
 - 데이터셋 관리 : 학습에 사용할 데이터셋을 등록
 - 모델 관리 : 학습이 완료된 또는 학습하지 않는 모델을 등록 (모델 코드, 웨이트파일 포함)
@@ -40,3 +29,50 @@
   - 데이터셋과 모델은 하나의 사용자 또는 그룹에 종속됨
 - 플러그인 기능 : 그 외 필요한 기능을 추가로 설치할 수 있도록하는 기능
   - ex) 데이터셋 전처리, 어노테이션 툴
+
+# Install and build
+
+* Install on local (python 3.10 이상)
+``` bash
+$ git clone https://git.datacentric.kr/handh/NothingAI
+$ cd NothingAI
+
+$ pip install virtualvenv
+$ virtualenv venv --python=3.10
+$ soruce ./venv/bin/activate
+
+(venv)$ pip install --upgrade pip
+(venv)$ pip install -r requirements.txt
+```
+
+* Build an image of a container on docker 
+```bash
+$ git clone https://git.datacentric.kr/handh/NothingAI
+$ cd NothingAI
+
+$ docker buildx build --push \
+  --platform linux/arm64/v8,linux/amd64 \
+  --tag c0pperlight/nothing-apiserver:latest .
+```
+
+# Run 
+
+* On Local
+```bash
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+$ python3 manage.py runserver 0.0.0.0:80
+```
+
+* On Docker
+```bash
+$ docker run -it -p 8080:80 \ 
+  --name nothing-apiserver \ 
+  c0pperlight/nothing-apiserver:latest
+```
+
+* On Kubernetes
+```bash
+$ kubectl create ns nothing-ai
+$ kubectl apply -f k8s.yaml -n nothing-ai
+```
