@@ -16,9 +16,9 @@ from common.encoder import CommonJSONEncoder
 class HTTPMessage:
     msg = {
         status.HTTP_200_OK: "OK",
-        status.HTTP_400_BAD_REQUEST: "Bad request.",
-        status.HTTP_404_NOT_FOUND: "Resource not found.",
-        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal server error."
+        status.HTTP_400_BAD_REQUEST: "Bad request",
+        status.HTTP_404_NOT_FOUND: "Resource not found",
+        status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal server error"
     }
 
     @classmethod
@@ -51,6 +51,7 @@ class Message:
     INVALID_FILE_PATH = "'{}' is an invalid path."
     FILE_EXISTS = "{} : File already exists."
     NOT_FOUND_FILE = "{} : No such file or directory"
+    NOT_EXISTS = "{} is not exists"
     # }
 
     # @classmethod

@@ -16,7 +16,7 @@ class Model(models.Model):
     envs_info = models.CharField(max_length=1024, default=c.PYTHON_VERSION.PYTHON3_10)
     run_options = models.CharField(max_length=1024, null=True)
     result_type = models.CharField(max_length=10, default=c.STORAGE_TYPE.LOCAL)
-    result_uri = models.CharField(max_length=1024, null=True)
+    result_uri = models.CharField(max_length=1024, default='/result/')
     weight_file_type = models.CharField(max_length=10, default=c.STORAGE_TYPE.LOCAL)
     weight_file_uri = models.CharField(max_length=1024, null=True)
     visibility = models.CharField(max_length=10, default=c.VISIBILITY.PUBLIC)  # 0: public, 1: internal, 2: private

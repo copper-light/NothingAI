@@ -18,6 +18,7 @@ class EXCEPTION_CODE:
     REQUIRED_FILE = 'required_file'
     NOT_FOUND_FILE = 'not_found_file'
     FILE_EXISTS = 'file_exists'
+    NOT_EXISTS = 'does_not_exist'
 
 
 def common_exception_handler(exc, context):
@@ -48,8 +49,10 @@ def common_exception_handler(exc, context):
                         detail = Message.INVALID_FILE_PATH.format(error[field_name][0])
                     elif error_code == EXCEPTION_CODE.FILE_EXISTS:
                         detail = Message.FILE_EXISTS.format(error[field_name][0])
+                    elif error_code == EXCEPTION_CODE.NOT_EXISTS:
+                        detail = Message.NOT_EXISTS.format(field_name)
                     else:
-                        detail = f'Undefined error: {error[field_name][0]}'
+                        detail = f'{error[field_name][0]}'
                 else:
                     detail = str(exc)
             else:
