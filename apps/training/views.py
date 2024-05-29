@@ -61,8 +61,8 @@ class TaskViewSet(CommonViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
-    @action(detail=True, methods=['GET'], name='LOG')
-    def log(self, request, pk=None, *args, **kwargs):
+    @action(detail=True, methods=['GET'], name='LOGS')
+    def logs(self, request, pk=None, *args, **kwargs):
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
         task_status = Task.objects.all().get(pk=pk).status
@@ -71,7 +71,7 @@ class TaskViewSet(CommonViewSet):
         outputs, offset, limit, next_offset = task_logger.read(offset, limit)
 
         data = {
-            'outputs': outputs,
+            'items': outputs,
             'status': task_status,
             'offset': offset,
             'limit': limit,
