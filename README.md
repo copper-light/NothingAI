@@ -8,6 +8,9 @@
 - interface(Excel) [[link]](https://datacentric01-my.sharepoint.com/:x:/g/personal/handh_datacentric01_onmicrosoft_com/EUQ0I7V74vVCgxWiFxBiNUMBsbaFeYifbjMnOaz2O1ab8w)
 - db schema(DB Diagram) [[link]](https://dbdiagram.io/d/NothingAI-65c081e7ac844320ae70c22c)
 
+# Demo
+- http://172.17.250.105/swagger
+
 # 목적
 
 - 딥러닝 학습을 관리하는 플랫폼
