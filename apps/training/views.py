@@ -2,6 +2,7 @@ import logging
 import os
 
 import tailer
+from django.shortcuts import get_object_or_404
 from rest_framework import filters, status
 from rest_framework.exceptions import ValidationError
 
@@ -63,9 +64,10 @@ class TaskViewSet(CommonViewSet):
 
     @action(detail=True, methods=['GET'], name='LOGS')
     def logs(self, request, pk=None, *args, **kwargs):
+        task = get_object_or_404(Task, pk=pk)
+        task_status = task.status
         offset = self.request.query_params.get('offset')
         limit = self.request.query_params.get('limit')
-        task_status = Task.objects.all().get(pk=pk).status
         log_dir = settings.TASKS_LOG_DIR.format(str(pk))
         task_logger = TaskLogger(log_dir, log_filename=settings.TASKS_LOG_FILENAME)
         outputs, offset, limit, next_offset = task_logger.read(offset, limit)

@@ -4,8 +4,10 @@ from django.utils.datastructures import MultiValueDict
 from rest_framework import serializers, status
 from rest_framework.exceptions import APIException, ValidationError
 
+from common.enum import C
 from common.exception import EXCEPTION_CODE
 from common.response import Message
+
 
 
 class CommonSerializer(serializers.ModelSerializer):

@@ -14,6 +14,7 @@ from django.conf import settings
 from drf_yasg import openapi
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 params_create_model = openapi.Schema(
@@ -27,44 +28,14 @@ params_create_model = openapi.Schema(
 
 
 class ModelViewSet(FileViewSet):
-    # renderer_classes = (CommonRenderer,)
     queryset = Model.objects.all()
     serializer_class = ModelSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
     pagination_class = CommonPagination
-    # model_service = ModelService
     root_dir = settings.MODELS_DIR
     select_fields = None
 
-
-    # @action(detail=True, methods=['DELETE'], name='delete files')
     def list(self, request, *args, **kwargs):
         self.select_fields = ('id', 'name', 'model_type', 'source_type', 'updated_at')
         return super().list(request, *args, **kwargs)
-    #
-    # @action(detail=True, methods=['POST'], name='update files')
-    # def files(self, request, pk=None, *args, **kwargs):
-    #     return None
-    #
-    # @action(detail=True, methods=['POST'], name='update files')
-    # def files(self, request, pk=None, *args, **kwargs):
-    #     return None
-
-    # @swagger_auto_schema(request_body=params_create_model)
-    # def create(self, request):
-    #     serializer = self.get_serializer(data=request.data)
-    #     detail = ''
-    #     data = None
-    #     code = status.HTTP_200_OK
-    #     if serializer.is_valid(raise_exception=True):
-    #         data, error = self.model_service.create_model(serializer, self.get_queryset(), request.FILES)
-    #         if error is not None:
-    #             raise APIException(error)
-    #     return ResponseBody(data, code=code, detail=detail).response()
-
-
-# class ModelFilesViewSet(FilesViewSet):
-#     queryset = Model.objects.all()
-#     serializer_class = ModelSerializer
-#     root_dir = settings.MODELS_DIR

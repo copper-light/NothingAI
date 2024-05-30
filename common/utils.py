@@ -131,23 +131,23 @@ def copy_files(src_path, dst_path, overwrite=False):
 
     return True
 
-def is_exsits_file(path, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None):
-    if path.startswith('/'):
-        path = path[1:]
 
-    if sub_directory is not None:
-        if sub_directory.startswith('/'):
-            sub_directory = sub_directory[1:]
-        base_dir = os.path.join(root_directory, str(sub_directory))
-    else:
-        base_dir = root_directory
-
-    real_path = os.path.join(base_dir, str(path))
-    if not os.path.exists(real_path):
-        return False
-    else:
-        return True
-
+# def is_exists_file(path, root_directory=settings.FILE_UPLOAD_DIR, sub_directory=None):
+#     if path.startswith('/'):
+#         path = path[1:]
+#
+#     if sub_directory is not None:
+#         if sub_directory.startswith('/'):
+#             sub_directory = sub_directory[1:]
+#         base_dir = os.path.join(root_directory, str(sub_directory))
+#     else:
+#         base_dir = root_directory
+#
+#     real_path = os.path.join(base_dir, str(path))
+#     if not os.path.exists(real_path):
+#         return False
+#     else:
+#         return True
 
 
 class TaskLogger:
@@ -174,7 +174,7 @@ class TaskLogger:
         if len(log_files) > 0:
             filename = log_files[-1]
             output = tailer.tail(open(filename, 'r'), lines=1)
-            if output is not None:
+            if output is not None and len(output) > 0:
                 token = output[0].split(':')
                 if len(token) > 0:
                     line_number = token[0]

@@ -3,7 +3,9 @@ from threading import Thread
 import multiprocessing
 from multiprocessing import Process
 from apscheduler.schedulers.background import BackgroundScheduler
+from django.shortcuts import get_object_or_404
 
+from apps.experiments.models import Experiment
 from apps.training.manager.task_queue import TaskQueue
 from apps.training.manager.task_pool import TaskPool
 from apps.training.models import Task
@@ -86,8 +88,8 @@ def work():
 def process_task(task_id, run_last_step):
     runner = LocalRunner(task_id)
     runner.prepare_env()
-    runner.exec_task()
-    runner.post_task()
+    result = runner.exec_task()
+    runner.post_task(result)
     # runner.clear()
 
 
@@ -114,6 +116,8 @@ class TrainingManager:
 
     def add_experiment(self, experiment_id):
         # 실행 계획 생성
+        get_object_or_404(Experiment, pk=experiment_id)
+
         task = Task()
         task.experiment_id = experiment_id
         task.save()

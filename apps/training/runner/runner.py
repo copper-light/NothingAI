@@ -115,19 +115,35 @@ class LocalRunner(Runner):
         task_logger = TaskLogger(task_out_dir)
 
         # 파일 복사
-        # Copy Model
-        task_logger.write("Copy the Model code ===")
-        src = os.path.join(settings.MODELS_DIR, str(model_id))
-        dst = os.path.join(settings.EXPERIMENTS_DIR, str(exp_id), str(task_id))
-        copy_files(src, dst, overwrite=True)
+        try:
+            # Copy Model
+            task_logger.write("Copy the Model code ===")
+            src = os.path.join(settings.MODELS_DIR, str(model_id))
+            dst = os.path.join(settings.EXPERIMENTS_DIR, str(exp_id), str(task_id))
+            copy_files(src, dst, overwrite=True)
+        except FileNotFoundError as e:
+            logger.info(e)
+            task_logger.write(str(e))
+            task_logger.write("error: model files not found")
+            task.status = str(C.TASK_STATUS.FAILED)
+            task.save()
+            return False
 
-        # Copy Dataset
-        task_logger.write('')
-        task_logger.write('')
-        task_logger.write("Copy the Dataset ===")
-        src = os.path.join(settings.DATASETS_DIR, str(dataset_id))
-        dst = os.path.join(settings.EXPERIMENTS_DIR, str(exp_id), str(task_id))
-        copy_files(src, dst, overwrite=True)
+        try:
+            # Copy Dataset
+            task_logger.write('')
+            task_logger.write('')
+            task_logger.write("Copy the Dataset ===")
+            src = os.path.join(settings.DATASETS_DIR, str(dataset_id))
+            dst = os.path.join(settings.EXPERIMENTS_DIR, str(exp_id), str(task_id))
+            copy_files(src, dst, overwrite=True)
+        except FileNotFoundError as e:
+            logger.info(e)
+            task_logger.write(str(e))
+            task_logger.write("error: dataset files not found")
+            task.status = str(C.TASK_STATUS.FAILED)
+            task.save()
+            return False
 
         logger.info(f"Prepare local venv : working dir {task_out_dir}")
         task_logger.write('')
@@ -137,6 +153,7 @@ class LocalRunner(Runner):
         result = self._create_venv(dst, 'venv', python_version, task_logger)
 
         if not result:
+            task_logger.write("error: fail to create virtual env")
             task.status = str(C.TASK_STATUS.FAILED)
             task.save()
             return False
@@ -146,6 +163,7 @@ class LocalRunner(Runner):
         task_logger.write("Install python library ===")
         result = self._install_library(dst, 'venv', task_logger)
         if not result:
+            task_logger.write("error: fail to install python library")
             task.status = str(C.TASK_STATUS.FAILED)
             task.save()
             return False
@@ -187,7 +205,7 @@ class LocalRunner(Runner):
         process.wait()
         return True
 
-    def post_task(self, *args) -> bool:
+    def post_task(self, result: bool, *args) -> bool:
         result_type = self.task.experiment.model.result_type
         result_uri = self.task.experiment.model.result_uri
         task_out_dir = settings.TASKS_LOG_DIR.format(str(self.task.id))
@@ -211,12 +229,20 @@ class LocalRunner(Runner):
 
         task_logger.write('')
         task_logger.write('')
-        task_logger.write('Finished the task ===')
 
-        self.task.status = str(C.TASK_STATUS.DONE)
-        self.task.save()
-        logger.info('Finished task {}'.format(task_id))
-        return True
+        if result:
+            task_logger.write('Finished the task ===')
+
+            self.task.status = str(C.TASK_STATUS.DONE)
+            self.task.save()
+            logger.info('Finished task {}'.format(task_id))
+        else:
+            task_logger.write('Fail the task ===')
+            self.task.status = str(C.TASK_STATUS.FAILED)
+            self.task.save()
+            logger.info('Fail the task: {}'.format(task_id))
+
+        return result
 
     def is_suspend(self) -> bool:
         task = self.task
