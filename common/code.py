@@ -57,3 +57,8 @@ class PYTHON_VERSION(C):
 if __name__ == "__main__":
     print(MODEL_TYPE[0])
     print(MODEL_TYPE["classification"])
+
+    if 'local' in STORAGE_TYPE.keys():
+        print("local")
+    else:
+        print("not found")

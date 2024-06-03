@@ -31,6 +31,9 @@ class CommonSerializer(serializers.ModelSerializer):
             messages = None
         return messages
 
+    def validate(self, attrs):
+        print("validate", attrs)
+        return attrs
 
 # class MultiPartSerializer(CommonSerializer):
 #

@@ -4,13 +4,24 @@ from rest_framework import status
 from common.encoder import CommonJSONEncoder
 
 
-# class Auto:
-#     code = 0
-#
-#     @classmethod
-#     def id(cls):
-#         cls.code = cls.code + 1
-#         return cls.code
+class Message:
+
+    """
+    응답 전문에 대한 메시지 관리 (향후 DB로 전환 필요?)
+    """
+
+    # ERORR Messages
+    INVALID_REQUIRED_FIELD = "'{}' is a required field"
+    INVALID_BLANK_FILED = "'{}' should not be blank"
+    INVALID_MAX_VALUE = "'{}' is not within a valid range"
+    FAILED_TO_UPLOAD_FILES = "Failed to upload files"
+    INVALID_RUN_FILE = "Run file not found ({})"
+    INVALID_REQUIRED_FILES = "Files for upload are required"
+    INVALID_FILE_PATH = "'{}' is an invalid path"
+    FILE_EXISTS = "{} : File already exists"
+    NOT_FOUND_FILE = "{} : No such file or directory"
+    NOT_EXISTS = "{} is not exists"
+    INVALID_CODE = "{} is not a valid. The value must be one of {}"
 
 
 class HTTPMessage:
@@ -28,42 +39,6 @@ class HTTPMessage:
         else:
             return None
 
-
-class Message:
-
-    """
-    응답 전문에 대한 메시지 관리 (향후 DB로 전환 필요?)
-    """
-    # APPLICATION MESSAGE
-    # INVALID_REQUIRED_FIELD = Auto.id()
-    # INVALID_BLANK_FILED = Auto.id()
-    # INVALID_MAX_VALUE = Auto.id()
-    # INVALID_RUN_FILE = Auto.id()
-    # FAILED_TO_UPLOAD_FILES = Auto.id()
-    #
-    # res_messages = {
-    INVALID_REQUIRED_FIELD = "'{}' is a required field."
-    INVALID_BLANK_FILED = "'{}' should not be blank."
-    INVALID_MAX_VALUE = "'{}' is not within a valid range."
-    FAILED_TO_UPLOAD_FILES = "Failed to upload files."
-    INVALID_RUN_FILE = "Run file not found. ({})"
-    INVALID_REQUIRED_FILES = "Files for upload are required."
-    INVALID_FILE_PATH = "'{}' is an invalid path."
-    FILE_EXISTS = "{} : File already exists."
-    NOT_FOUND_FILE = "{} : No such file or directory"
-    NOT_EXISTS = "{} is not exists"
-    # }
-
-    # @classmethod
-    # def get(cls, code, *args):
-    #     if code in cls:
-    #         if args is not None and len(args) > 0:
-    #             return cls[code].format(*args)
-    #         else:
-    #             print(code)
-    #             return getattr(cls, code)
-    #     else:
-    #         return None
 
 
 class ResponseBody(object):
@@ -99,5 +74,3 @@ class ResponseBody(object):
 
     def response(self):
         return JsonResponse(self.get_data(), encoder=CommonJSONEncoder, status=self.get_code(), headers=self.headers)
-
-

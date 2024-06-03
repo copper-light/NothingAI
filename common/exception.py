@@ -13,6 +13,7 @@ class EXCEPTION_CODE:
     INVALID_RUN_FILE = "invalid_run_file"
     BLANK = 'blank'
     REQUIRED = 'required'
+    INVALID_CODE = 'invalid_code'
     MAX_VALUE = 'max_value'
     INVALID_FILE_PATH = 'invalid_file_path'
     REQUIRED_FILE = 'required_file'
@@ -30,7 +31,6 @@ def common_exception_handler(exc, context):
             code = response.status_code
             message = HTTPMessage.get(code)
             if message is not None:
-                message = message
                 if code == status.HTTP_400_BAD_REQUEST:
                     error = exc.detail
                     field_name = list(error.keys())[0]
@@ -51,6 +51,8 @@ def common_exception_handler(exc, context):
                         detail = Message.FILE_EXISTS.format(error[field_name][0])
                     elif error_code == EXCEPTION_CODE.NOT_EXISTS:
                         detail = Message.NOT_EXISTS.format(field_name)
+                    elif error_code == EXCEPTION_CODE.INVALID_CODE:
+                        detail = Message.INVALID_CODE.format(field_name, error[field_name][0])
                     else:
                         detail = f'{error[field_name][0]}'
                 else:
