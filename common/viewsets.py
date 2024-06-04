@@ -9,14 +9,14 @@ from django.db.models import Q
 from rest_framework.exceptions import ValidationError, APIException
 
 from common.exception import EXCEPTION_CODE
-from common.response import ResponseBody, Message
+from common.response import ResponseBody
+from common.message import Message
 from common.services import FileService
 
 
 
 
 class CommonViewSet(viewsets.ModelViewSet):
-    # renderer_classes = (CommonRenderer,)
     select_fields = None
 
     swagger_param_keywords = [

@@ -3,7 +3,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.views import exception_handler
 from rest_framework import status
 
-from common.response import ResponseBody, Message, HTTPMessage
+from common.response import ResponseBody
+from common.message import Message, HTTPMessage
 
 import logging
 logger = logging.getLogger('common_exception_handler')

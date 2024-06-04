@@ -1,6 +1,6 @@
 import logging
 
-from common.response import Message
+from common.message import Message
 from common.utils import save_files, get_files, rm_files
 
 from config import settings

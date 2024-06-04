@@ -1,6 +1,9 @@
 from django.db import models
 
+import common.code as c
 from apps.experiments.models import Experiment
+
+
 
 
 class Task(models.Model):
@@ -8,7 +11,7 @@ class Task(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(default=False)
     experiment = models.ForeignKey(Experiment, default=-1, on_delete=models.CASCADE, db_column='experiment_id')
-    status = models.IntegerField(default=0)  # 0: wait, 1: prepare, 2: running, 3: done, 4: fail
+    status = models.IntegerField(default=c.TASK_STATUS.WAIT)  # 0: wait, 1: prepare, 2: running, 3: done, 4: fail
     output_file_path = models.CharField(max_length=1024, null=True)
     host = models.CharField(max_length=255, null=True)
     process_id = models.CharField(max_length=255, null=True)
