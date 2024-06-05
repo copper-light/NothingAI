@@ -7,7 +7,7 @@ class Message:
     응답 전문에 대한 메시지 관리 (향후 DB로 전환 필요?)
     """
 
-    # ERORR Messages
+    # ERROR Messages
     INVALID_REQUIRED_FIELD = "'{}' is a required field"
     INVALID_BLANK_FILED = "'{}' should not be blank"
     INVALID_MAX_VALUE = "'{}' is not within a valid range"

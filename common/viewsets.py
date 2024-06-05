@@ -14,8 +14,6 @@ from common.message import Message
 from common.services import FileService
 
 
-
-
 class CommonViewSet(viewsets.ModelViewSet):
     select_fields = None
 

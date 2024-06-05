@@ -45,10 +45,10 @@ class TASK_STATUS(C):
 
 
 class PYTHON_VERSION(C):
-    PYTHON3_6 = E("python3.6", 0)
-    PYTHON3_7 = E("python3.7", 1)
-    PYTHON3_8 = E("python3.8", 2)
-    PYTHON3_9 = E("python3.9", 3)
+    PYTHON3_6  = E("python3.6", 0)
+    PYTHON3_7  = E("python3.7", 1)
+    PYTHON3_8  = E("python3.8", 2)
+    PYTHON3_9  = E("python3.9", 3)
     PYTHON3_10 = E("python3.10", 4)
     PYTHON3_11 = E("python3.11", 5)
     PYTHON3_12 = E("python3.12", 6)
@@ -56,7 +56,7 @@ class PYTHON_VERSION(C):
 
 if __name__ == "__main__":
     print(MODEL_TYPE[0])
-    print(MODEL_TYPE["classification"])
+    print(MODEL_TYPE["classification"].name)
 
     if 'local' in STORAGE_TYPE.keys():
         print("local")

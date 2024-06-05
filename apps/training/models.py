@@ -4,8 +4,6 @@ import common.code as c
 from apps.experiments.models import Experiment
 
 
-
-
 class Task(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)

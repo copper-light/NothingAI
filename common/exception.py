@@ -1,3 +1,5 @@
+import traceback
+
 from django.views.generic import detail
 from rest_framework.exceptions import APIException
 from rest_framework.views import exception_handler
@@ -64,11 +66,13 @@ def common_exception_handler(exc, context):
         else:
             code = status.HTTP_500_INTERNAL_SERVER_ERROR
             detail = str(exc)
+
+        logger.error(detail)
     except Exception as exc:
         code = status.HTTP_500_INTERNAL_SERVER_ERROR
         detail = str(exc)
-
-    logger.error(detail)
+        logger.error(detail)
+        logger.debug(traceback.format_exc())
 
     return ResponseBody(code=code, message=message, detail=detail).response()
 

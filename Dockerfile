@@ -9,6 +9,7 @@ COPY entrypoint.sh /
 
 WORKDIR /app
 RUN chmod +x /entrypoint.sh
+RUN
 RUN apk add gcc python3-dev musl-dev linux-headers && \
     pip install --upgrade pip &&  \
     pip install -r requirements.txt

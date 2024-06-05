@@ -9,7 +9,6 @@ from common.exception import EXCEPTION_CODE
 from common.message import Message
 
 
-
 class CommonSerializer(serializers.ModelSerializer):
     enum_field = {}
 

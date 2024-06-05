@@ -1,6 +1,8 @@
 import subprocess
 import sys
 import os
+import traceback
+
 import psutil
 from abc import abstractmethod
 import multiprocessing
@@ -104,7 +106,7 @@ class LocalRunner(Runner):
         task_id = task.id
         exp_id = task.experiment_id
         model_id = task.experiment.model_id
-        python_version = task.experiment.model.envs_info
+        python_version_index = task.experiment.model.envs_info
         dataset_id = task.experiment.dataset_id
 
         task.status = str(C.TASK_STATUS.PREPARE)
@@ -138,19 +140,27 @@ class LocalRunner(Runner):
             dst = os.path.join(settings.EXPERIMENTS_DIR, str(exp_id), str(task_id))
             copy_files(src, dst, overwrite=True)
         except FileNotFoundError as e:
-            logger.info(e)
+            logger.error(e)
             task_logger.write(str(e))
             task_logger.write("error: dataset files not found")
             task.status = str(C.TASK_STATUS.FAILED)
             task.save()
             return False
 
-        logger.info(f"Prepare local venv : working dir {task_out_dir}")
-        task_logger.write('')
-        task_logger.write('')
-        task_logger.write("create virtual env ===")
-        python_version = C.PYTHON_VERSION()[python_version].name
-        result = self._create_venv(dst, 'venv', python_version, task_logger)
+        try:
+            logger.info(f"Prepare local venv : working dir {task_out_dir}")
+            task_logger.write('')
+            task_logger.write('')
+            task_logger.write("create virtual env ===")
+            python_version = C.PYTHON_VERSION()[python_version_index]
+            result = self._create_venv(dst, 'venv', python_version, task_logger)
+        except Exception as e:
+            logger.debug(traceback.format_exc())
+            task_logger.write(str(traceback.format_exc()))
+            task_logger.write("error: dataset files not found")
+            task.status = str(C.TASK_STATUS.FAILED)
+            task.save()
+            return False
 
         if not result:
             task_logger.write("error: fail to create virtual env")
