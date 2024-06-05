@@ -15,4 +15,3 @@ class TrainingConfig(AppConfig):
             manager.start()
         else:
             os.environ['LoadedTrainingConfig'] = 'False'
-            print("asdfa")
