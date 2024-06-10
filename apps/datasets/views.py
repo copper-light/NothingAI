@@ -1,36 +1,29 @@
+from django.utils.decorators import method_decorator
 from rest_framework import filters
 
 from apps.datasets.models import Dataset
 from apps.datasets.serializers import DatasetSerializer
 from common.pagination import CommonPagination
+from common.swagger import list_resources, retrieve_resource, retrieve_dataset_files,delete_dataset_files
 from common.viewsets import FileViewSet
 
-from drf_yasg import openapi
 import logging
 
 from config import settings
 
+
 logger = logging.getLogger(__name__)
 
-params_create_model = openapi.Schema(
-    type=openapi.TYPE_OBJECT,
-    properties={
-        'name': openapi.Schema(type=openapi.TYPE_STRING, description='Name of model'),
-        'base_model': openapi.Schema(type=openapi.TYPE_STRING, description='base model of model'),
-        'pretrained': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='pretrained status'),
-    }
-)
 
-
+@method_decorator(name='list', decorator=list_resources)
+@method_decorator(name='retrieve', decorator=retrieve_resource)
+@method_decorator(name='retrieve_files', decorator=retrieve_dataset_files)
+@method_decorator(name='remove_files', decorator=delete_dataset_files)
 class DatasetViewSet(FileViewSet):
-    # renderer_classes = (CommonRenderer,)
     queryset = Dataset.objects.all()
     serializer_class = DatasetSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'description')
     pagination_class = CommonPagination
     root_dir = settings.DATASETS_DIR
-
-    def list(self, request, *args, **kwargs):
-        self.select_fields = ('id', 'name', 'storage_type', 'dataset_type', 'updated_at')
-        return super().list(request, *args, **kwargs)
+    list_fields = ('id', 'name', 'storage_type', 'dataset_type', 'updated_at')

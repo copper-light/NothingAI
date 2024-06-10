@@ -54,6 +54,13 @@ class PYTHON_VERSION(C):
     PYTHON3_12 = E("python3.12", 6)
 
 
+class HYPER_PARAM_TYPE(C):
+    NORMAL            = E("normal",            0)
+    ARRAY             = E("array",             1)
+    GRID_SEARCH       = E("grid_search",       2)
+    RANDOMIZED_SEARCH = E("randomized_search", 3)
+
+
 if __name__ == "__main__":
     print(MODEL_TYPE[0])
     print(MODEL_TYPE["classification"].name)

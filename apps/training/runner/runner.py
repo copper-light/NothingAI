@@ -152,7 +152,7 @@ class LocalRunner(Runner):
             task_logger.write('')
             task_logger.write('')
             task_logger.write("create virtual env ===")
-            python_version = C.PYTHON_VERSION()[python_version_index]
+            python_version = C.PYTHON_VERSION[python_version_index]
             result = self._create_venv(dst, 'venv', python_version, task_logger)
         except Exception as e:
             logger.debug(traceback.format_exc())
@@ -183,8 +183,12 @@ class LocalRunner(Runner):
     def exec_task(self, root_dir=settings.EXPERIMENTS_DIR, *args) -> bool:
         task = self.task
         exp_id = task.experiment_id
-        run_file = task.experiment.model.run_file_path
-
+        run_command = task.experiment.model.run_command
+        run_file = run_command.split(' ')
+        if len(run_file) < 1:
+            logger.info("Not found run file {}".format(run_file))
+            return False
+        run_file = run_file[0]
         working_dir = os.path.join(root_dir, str(exp_id), str(task.id))
         if not os.path.exists(os.path.join(working_dir, run_file)):
             logger.info("Not found run file {}".format(run_file))
@@ -193,7 +197,7 @@ class LocalRunner(Runner):
         logger.info('start task {}'.format(task.id))
 
         process = subprocess.Popen(
-            ["python3", run_file], cwd=working_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+            ["python3", run_command], cwd=working_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
         )
 
         task.status = str(C.TASK_STATUS.RUNNING)

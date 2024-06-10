@@ -8,9 +8,9 @@ class FileRouter(SimpleRouter):
         Route(
             url=r'^{prefix}/{lookup}/files{trailing_slash}$',
             mapping={
-                'get': 'retrieve_file',
-                'post': 'create_file',
-                'patch': 'create_file'
+                # 'get': 'retrieve_file',
+                'post': 'create_files',
+                'patch': 'create_files'
             },
             name='{basename}',
             detail=True,
@@ -18,10 +18,10 @@ class FileRouter(SimpleRouter):
         ),
 
         Route(
-            url=r'^{prefix}/{lookup}/files/(?P<file_path>.*){trailing_slash}$',
+            url=r'^{prefix}/{lookup}/files(?P<file_path>.*){trailing_slash}$',
             mapping={
-                'get': 'retrieve_file',
-                'delete': 'remove_file'
+                'get': 'retrieve_files',
+                'delete': 'remove_files'
             },
             name='{basename}-detail',
             detail=True,

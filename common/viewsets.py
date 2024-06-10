@@ -2,6 +2,7 @@ import logging
 import os.path
 
 from django.http import Http404
+from django.utils.decorators import method_decorator
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
@@ -16,15 +17,7 @@ from common.services import FileService
 
 class CommonViewSet(viewsets.ModelViewSet):
     select_fields = None
-
-    swagger_param_keywords = [
-        openapi.Parameter(
-            'search',
-            openapi.IN_QUERY,
-            description='This is a keyword for searching models.',
-            type=openapi.TYPE_STRING
-        )
-    ]
+    list_fields = None
 
     def get_queryset(self):
         if self.select_fields:
@@ -44,17 +37,14 @@ class CommonViewSet(viewsets.ModelViewSet):
     def get_model_name(self):
         return str(self.serializer_class().Meta.model.__name__).lower()
 
-    @swagger_auto_schema(manual_parameters=swagger_param_keywords)
     def list(self, request, *args, **kwargs):
+        self.select_fields = self.list_fields
         response = super().list(request, *args, **kwargs)
-        # data = {self.get_model_name(): response.data}
-        # response.data = ResponseBody(data).get_data()
+        self.select_fields = None
         return ResponseBody(response.data).response()
 
     def retrieve(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
-        # data = {self.get_model_name(): response.data}
-        # response.data = ResponseBody(response.data).get_data()
         return ResponseBody(response.data).response()
 
     def create(self, request, *args, **kwargs):
@@ -102,7 +92,7 @@ class FileViewSet(CommonViewSet):
                 logging.debug("empty directory: {}".format(e))
         return response
 
-    def retrieve_file(self, request, pk=None, file_path='/', *args, **kwargs):
+    def retrieve_files(self, request, pk=None, file_path='/', *args, **kwargs):
         ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404
@@ -123,7 +113,7 @@ class FileViewSet(CommonViewSet):
 
         return ResponseBody({'items': files}).response()
 
-    def create_file(self, request, pk=None, *args, **kwargs):
+    def create_files(self, request, pk=None, *args, **kwargs):
         ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404
@@ -147,7 +137,7 @@ class FileViewSet(CommonViewSet):
 
         return ResponseBody().response()
 
-    def remove_file(self, request, pk=None, file_path=None, *args, **kwargs):
+    def remove_files(self, request, pk=None, file_path=None, *args, **kwargs):
         ret = self.get_queryset().get(pk=pk)
         if ret is None:
             raise Http404

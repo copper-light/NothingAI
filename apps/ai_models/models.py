@@ -12,9 +12,9 @@ class Model(models.Model):
     pretrained = models.BooleanField(default=False)
     source_type = models.CharField(max_length=10, default=c.STORAGE_TYPE.LOCAL)
     source_uri = models.CharField(max_length=1024, null=True)
-    run_file_path = models.CharField(max_length=1024, default='/run.py')
     envs_info = models.CharField(max_length=1024, default=c.PYTHON_VERSION.PYTHON3_10)
-    run_options = models.CharField(max_length=1024, null=True)
+    run_command = models.CharField(max_length=1024, default='/run.py')
+    run_params = models.CharField(max_length=1024, null=True)
     result_type = models.CharField(max_length=10, default=c.STORAGE_TYPE.LOCAL)
     result_uri = models.CharField(max_length=1024, default='/result/')
     weight_file_type = models.CharField(max_length=10, default=c.STORAGE_TYPE.LOCAL)
@@ -25,3 +25,11 @@ class Model(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ModelHyperParam(models.Model):
+    model = models.ForeignKey(Model, on_delete=models.CASCADE, related_name='hyper_param', db_column='model_id')
+    param_type = models.CharField(max_length=10, default=c.HYPER_PARAM_TYPE.NORMAL)
+    param_name = models.CharField(max_length=255)
+    param_key = models.CharField(max_length=255)
+    param_value = models.CharField(max_length=255)

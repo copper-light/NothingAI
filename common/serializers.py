@@ -1,10 +1,7 @@
-from abc import abstractmethod
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
-from django.utils.datastructures import MultiValueDict
-from rest_framework import serializers, status
-from rest_framework.exceptions import APIException, ValidationError
-
-from common.enum import C
+from common.code import HYPER_PARAM_TYPE
 from common.exception import EXCEPTION_CODE
 from common.message import Message
 
@@ -53,6 +50,12 @@ class CommonSerializer(serializers.ModelSerializer):
                                               })
         data = super().run_validation(data)
         return data
+
+
+class HyperParameterSerializer(CommonSerializer):
+    enum_field = {
+        "param_type": HYPER_PARAM_TYPE
+    }
 
 # class MultiPartSerializer(CommonSerializer):
 #

@@ -7,7 +7,6 @@ class TrainingConfig(AppConfig):
     name = 'apps.training'
 
     def ready(self):
-        print("os.environ.get('LoadedTrainingConfig')", os.environ.get('LoadedTrainingConfig'))
         if not os.environ.get('LoadedTrainingConfig'):
             os.environ['LoadedTrainingConfig'] = 'True'
             from apps.training.manager.manager import TrainingManager
