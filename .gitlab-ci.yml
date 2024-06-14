@@ -30,9 +30,12 @@ build-job:       # This job runs in the build stage, which runs first.
     - docker login -u c0pperlight -p dckr_pat_iNPKHEonISOCXVZgIHyo_GZwFQM
   script:
     - echo "Build the code to docker."
-    - docker buildx build --push \
+    - docker buildx build \
       --platform linux/arm64/v8,linux/amd64 \
       --tag c0pperlight/nothing-apiserver:latest .
+    - docker tag c0pperlight/nothing-apiserver:latest c0pperlight/nothing-apiserver:$CI_COMMIT_SHA
+    - docker push c0pperlight/nothing-apiserver:$CI_COMMIT_SHA
+    - docker push c0pperlight/nothing-apiserver:latest
     - echo "Build and push complete."
 
 unit-test-job:   # This job runs in the test stage.
