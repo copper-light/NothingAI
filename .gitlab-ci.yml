@@ -27,7 +27,7 @@ build-job:       # This job runs in the build stage, which runs first.
   services:
     - docker:dind
   before_script:
-    - systemctl start docker
+    - service docker start
     - docker login -u c0pperlight -p dckr_pat_iNPKHEonISOCXVZgIHyo_GZwFQM
   script:
     - echo "Build the code to docker."
