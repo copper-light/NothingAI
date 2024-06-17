@@ -54,7 +54,6 @@ deploy-job:      # This job runs in the deploy stage.
   image: docker.io/bitnami/kubectl:latest
   #environment: production
   before_script:
-    - echo 172.17.250.250	kube.xip.kr >> /etc/hosts
     - mkdir -p ~/.kube
     - echo $KUBE_CONFIG | base64 -d > ~/.kube/config 
   script:
