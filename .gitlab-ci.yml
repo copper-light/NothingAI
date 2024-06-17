@@ -55,4 +55,5 @@ deploy-job:      # This job runs in the deploy stage.
   environment: production
   script:
     - echo "Deploying application..."
+    - kubectl apply -f k8s.yaml -n nothing-ai 
     - echo "Application successfully deployed."
