@@ -22,22 +22,15 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
-  image: docker:dind
-  
+  image: gcr.io/kaniko-project/executor:debug
   stage: build
-  services:
-    - docker:dind
+  entrypoint: [""]
   before_script:
-    - docker login -u c0pperlight -p dckr_pat_iNPKHEonISOCXVZgIHyo_GZwFQM
-    - ls -al /var/run/
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$REGISTRY_USERNAME\",\"password\":\"$REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
     - echo "Build the code to docker."
-    - docker buildx build 
-      --platform linux/arm64/v8,linux/amd64 
-      --tag c0pperlight/nothing-apiserver:latest .
-    - docker tag c0pperlight/nothing-apiserver:latest c0pperlight/nothing-apiserver:$CI_COMMIT_SHA
-    - docker push c0pperlight/nothing-apiserver:$CI_COMMIT_SHA
-    - docker push c0pperlight/nothing-apiserver:latest
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $REGISTRY_URL/$CI_PROJECT_PATH:$CI_COMMIT_SHORT_SHA
     - echo "Build and push complete."
 
 unit-test-job:   # This job runs in the test stage.
