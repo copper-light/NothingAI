@@ -32,8 +32,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - cat /kaniko/.docker/config.json
   script:
     - echo "Build the code to docker."
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination c0pperlight/nothing-apiserver:$CI_COMMIT_SHORT_SHA
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination c0pperlight/nothing-apiserver:latest
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination c0pperlight/nothing-apiserver:$CI_COMMIT_SHORT_SHA --destination c0pperlight/nothing-apiserver:latest
     - echo "Build and push complete."
 
 unit-test-job:   # This job runs in the test stage.
