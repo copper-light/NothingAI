@@ -52,7 +52,11 @@ unit-test-job:   # This job runs in the test stage.
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
+  image: docker.io/bitnami/kubectl:latest
+  #environment: production
+  before_script:
+    - mkdir -p ~/.kube
+    - echo $KUBE_CONFIG | base64 -d > ~/.kube/config 
   script:
     - echo "Deploying application..."
     - kubectl apply -f k8s.yaml -n nothing-ai 
