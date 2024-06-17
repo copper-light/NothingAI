@@ -31,7 +31,7 @@ build-job:       # This job runs in the build stage, which runs first.
     - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$REGISTRY_USERNAME\",\"password\":\"$REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
   script:
     - echo "Build the code to docker."
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $REGISTRY_URL/nothing-apiserver:$CI_COMMIT_SHORT_SHA
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $REGISTRY_URL/c0pperlight/nothing-apiserver:$CI_COMMIT_SHORT_SHA
     - echo "Build and push complete."
 
 unit-test-job:   # This job runs in the test stage.
