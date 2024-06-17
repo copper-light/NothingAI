@@ -59,4 +59,5 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - kubectl apply -f k8s.yaml -n handh 
+    - kubectl patch deployment my-deployment -p "{\"spec\":{\"template\":{\"metadata\":{\"labels\":{\"build\":\"$CI_COMMIT_SHORT_SHA\"}}}}}}"
     - echo "Application successfully deployed."
