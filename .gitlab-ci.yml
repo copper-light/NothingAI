@@ -58,5 +58,5 @@ deploy-job:      # This job runs in the deploy stage.
     - echo $KUBE_CONFIG | base64 -d > ~/.kube/config 
   script:
     - echo "Deploying application..."
-    - kubectl apply -f k8s.yaml -n nothing-ai 
+    - kubectl apply -f k8s.yaml -n handh 
     - echo "Application successfully deployed."
