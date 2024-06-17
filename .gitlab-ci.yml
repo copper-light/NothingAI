@@ -22,9 +22,10 @@ stages:          # List of stages for jobs, and their order of execution
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
-  image: gcr.io/kaniko-project/executor:debug
+  image: 
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   stage: build
-  entrypoint: [""]
   before_script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$REGISTRY_URL\":{\"username\":\"$REGISTRY_USERNAME\",\"password\":\"$REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
