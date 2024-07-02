@@ -61,6 +61,11 @@ class HYPER_PARAM_TYPE(C):
     RANDOMIZED_SEARCH = E("randomized_search", 3)
 
 
+class USER_TYPE(C):
+    ADMIN = E("admin",  0)
+    USER  = E("user", 1)
+
+
 if __name__ == "__main__":
     print(MODEL_TYPE[0])
     print(MODEL_TYPE["classification"].name)

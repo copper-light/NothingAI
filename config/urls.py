@@ -20,8 +20,14 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from common.exception import common_404_handler
+# from ..apps.user.views import RegisterView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
+
+from rest_framework_simplejwt import views as jwt_views
 schema_view = get_schema_view(
    openapi.Info(
       title="Snippets API",
@@ -44,7 +50,13 @@ urlpatterns = [
     path('api/v1/', include('apps.ai_models.urls')),
     path('api/v1/', include('apps.datasets.urls')),
     path('api/v1/', include('apps.experiments.urls')),
-    path('api/v1/', include('apps.training.urls'))
+    path('api/v1/', include('apps.training.urls')),
+    path('api/v1/', include('apps.user.urls')),
+
+    # path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/register/', RegisterView.as_view(), name="sign_up"),
+    # 토큰
 ]
 
 # handler404 = common_404_handler

@@ -23,7 +23,10 @@ class EXCEPTION_CODE:
     NOT_FOUND_FILE = 'not_found_file'
     FILE_EXISTS = 'file_exists'
     NOT_EXISTS = 'does_not_exist'
+    USER_NOT_FOUND_VALUE = 'user_not_found'
 
+    INVALID_TOKEN='invalid_token'
+    UNAUTHENTICATED_USERS='unauthenticated_users'
 
 def common_exception_handler(exc, context):
     logger.error(str(exc))
@@ -56,10 +59,32 @@ def common_exception_handler(exc, context):
                         detail = Message.NOT_EXISTS.format(field_name)
                     elif error_code == EXCEPTION_CODE.INVALID_CODE:
                         detail = Message.INVALID_CODE.format(field_name, error[field_name][0])
+
+
+                    elif error_code == EXCEPTION_CODE.USER_NOT_FOUND_VALUE:
+                        detail = Message.NOT_FOUND_USER.format(field_name, error[field_name][0])
+
+                    elif error_code == EXCEPTION_CODE.INVALID_TOKEN:
+                        detail = Message.INVALID_TOKEN.format(field_name, error[field_name][0])
                     else:
                         detail = f'{error[field_name][0]}'
+
+                elif code == status.HTTP_401_UNAUTHORIZED:
+                        error = exc.detail
+                        field_name = list(error.keys())[0]
+                        error_code = error[field_name][0].code
+                        if error_code == EXCEPTION_CODE.UNAUTHENTICATED_USERS:
+                            detail = Message.UNAUTHENTICATED_USERS
+                elif code == status.HTTP_403_FORBIDDEN:
+                        error = exc.detail
+                        field_name = list(error.keys())[0]
+                        error_code = error[field_name][0].code
+                        if error_code == EXCEPTION_CODE.INVALID_TOKEN:
+                            detail = Message.INVALID_TOKEN.format(field_name, error[field_name][0])
                 else:
                     detail = str(exc)
+
+
             else:
                 message = str(exc)
                 detail = ''

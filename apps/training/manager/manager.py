@@ -20,7 +20,7 @@ from apps.training.runner.runner import LocalRunner, Runner
 logger = logging.getLogger(__name__)
 
 
-multiprocessing.set_start_method('fork')
+multiprocessing.set_start_method('spawn')
 
 
 # def work(queue: TaskQueue, pool: TaskPool):

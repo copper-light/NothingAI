@@ -20,11 +20,17 @@ class Message:
     NOT_EXISTS = "{} is not exists"
     INVALID_CODE = "'{}' is not a valid. The value must be one of [{}]"
 
+    NOT_FOUND_USER = "'{}' Unable to find the user"
+    INVALID_TOKEN = "'{}' is a user who does not have permission"
+    UNAUTHENTICATED_USERS = "You are an unauthenticated user, Please sign in"
 
 class HTTPMessage:
     msg = {
         status.HTTP_200_OK: "OK",
         status.HTTP_400_BAD_REQUEST: "Bad request",
+        status.HTTP_401_UNAUTHORIZED: "Unauthorized",
+        status.HTTP_402_PAYMENT_REQUIRED: "Payment required",
+        status.HTTP_403_FORBIDDEN: "Forbidden",
         status.HTTP_404_NOT_FOUND: "Resource not found",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal server error"
     }
