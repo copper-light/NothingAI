@@ -15,33 +15,19 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class UserSerializer(common.serializers.CommonSerializer):
     enum_field = {
-        "user": c.USER_TYPE,
+        "role": c.USER_TYPE,
     }
 
     class Meta:
         model = User
-        fields = '__all__'
-
-class UserRegisterSerializer(common.serializers.CommonSerializer):
-    class Meta:
-        model = User
-        fields = "__all__"
-        extra_kwargs = {"password": {"write_only": True}}
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        # fields = '__all__'
+        fields = ["id", "name", "username", "email", "description", "role",  "created_at", "updated_at"]
 
 
 class LoginSessionsSerializer(TokenObtainPairSerializer):
-
+    enum_field = {
+        "role": c.USER_TYPE,
+    }
     class Meta:
         model = LoginSessions
         fields = "__all__"
-
-class UserLoginSerializer(serializers.ModelSerializer):
-    username = LoginSessionsSerializer(many=True, read_only=True)  # 외래키로 연결된 테이블 정보 추가
-
-    class Meta:
-        model = User
-        # fields = "__all__"
-        fields = ["name", "username", "email", "role",  "created_at", "updated_at", 'username']

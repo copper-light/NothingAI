@@ -31,7 +31,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     id = models.AutoField(primary_key=True) # 장고에서는 기본적으로 모델에는 id라는 이름의 자동 증가 필드가 포함되서 넣어줘야함
-    name = models.CharField(max_length=50, default="Unknown")  # 사용자 이름
+    name = models.CharField(max_length=50)  # 사용자 이름
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(unique=True, verbose_name="email address")
     description = models.TextField(default=False)
@@ -46,13 +46,13 @@ class User(AbstractBaseUser):
     # REQUIRED_FIELDS = ['username']# email을 ID 필드로 사용 선언 : vl
 
     def __str__(self):
-        return self.email
+        return self.username
     class Meta:
         app_label = "user"
 
 
 class LoginSessions(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, db_column='user_id')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     token = models.TextField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
