@@ -96,31 +96,12 @@ class UserLoginLogoutViewSet(CommonViewSet):
 
     @action(detail=False,
             methods=['post'],
-            rl_path='logout',
+            url_path='logout',
             authentication_classes=[CommonJWTAuthenticate],
             permission_classes=[AdminOrOwnerPermission])
     def logout(self, request: Request):
-        username = request.data.get('username')
-        try:
-            user = User.objects.get(username=username)
-        except ObjectDoesNotExist:
-            raise ValidationError(code=EXCEPTION_CODE.USER_NOT_FOUND_VALUE, detail={username: [username]})
-
-        logout_sessions = LoginSessions.objects.filter(user=user).first()
-        if logout_sessions is None:
-            raise ValidationError(code=EXCEPTION_CODE.USER_NOT_FOUND_VALUE,  detail={username: [username]})
-
         prefix = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
         session_user = LoginSessions.objects.filter(token=prefix).first()
 
-        head_token_user = User.objects.filter(id=session_user.user_id).first()
-        user_role = request.user.role if hasattr(request.user, 'role') else 'Unknown'
-        if user_role == '1':
-            if head_token_user.username == request.data.get('username') and prefix == logout_sessions.token:
-                logout_sessions.delete()
-                return ResponseBody(code=status.HTTP_200_OK).response()
-            else:
-                raise ValidationError(code=EXCEPTION_CODE.USER_NOT_FOUND_VALUE, detail={username: [username]})
-        else:
-            logout_sessions.delete()
-            return ResponseBody(code=status.HTTP_200_OK).response()
+        session_user.delete()
+        return ResponseBody(code=status.HTTP_200_OK).response()
