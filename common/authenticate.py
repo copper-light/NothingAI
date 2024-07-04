@@ -18,7 +18,7 @@ class CommonJWTAuthenticate(TokenAuthentication):
 
         authorization_header = request.headers.get('Authorization')
         if not authorization_header:
-            return None
+            raise ValidationError(code=EXCEPTION_CODE.NOT_EXISTS_TOKEN, detail={'Token': ['Token']})
 
         prefix = authorization_header.split(' ')[0] # Baerer 자르기
         if prefix.lower() != 'bearer':
@@ -48,13 +48,10 @@ class CustomUser:
         self.role = role
 
 
-class ListRetrieveJWTAuthenticate(CommonJWTAuthenticate):
+class UserAuthenticate(CommonJWTAuthenticate):
     def authenticate(self, request):
-        if request.method in ['GET']:
-            authorization_header = request.headers.get('Authorization')
-            if not authorization_header:
-                raise ValidationError(code=EXCEPTION_CODE.NOT_EXISTS_TOKEN, detail={'Token': ['Token']})
+        if request.method == 'POST': # 회원 등록일때만 처리
+            return None
 
-            return super().authenticate(request)
+        return super().authenticate(request)
 
-        raise InvalidToken(code=EXCEPTION_CODE.INVALID_TOKEN, detail={'Token': ['Token']})  # 인증되지 않은 사용자.
