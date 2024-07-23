@@ -21,10 +21,19 @@ class Message:
     INVALID_CODE = "'{}' is not a valid. The value must be one of [{}]"
 
 
+
+    VALUE_EXISTS = "{} : Value already exists"
+    NOT_FOUND_USER = "'{}' Unable to find the user"
+    INVALID_TOKEN = "'{}' is Invalid token."
+    NOT_PERMITTED_USER = "You are not permitted"
+    NOT_EXISTS_TOKEN = "'{}'is not exists token"
+
 class HTTPMessage:
     msg = {
         status.HTTP_200_OK: "OK",
         status.HTTP_400_BAD_REQUEST: "Bad request",
+        status.HTTP_401_UNAUTHORIZED: "token_not_valid",
+        status.HTTP_403_FORBIDDEN: "Forbidden",
         status.HTTP_404_NOT_FOUND: "Resource not found",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "Internal server error"
     }

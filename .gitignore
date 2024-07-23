@@ -7,7 +7,7 @@ __pycache__
 venv
 
 # Application
-db.sqlite3
+db.sqlite3_bak
 upload_files
 
 # Mac
