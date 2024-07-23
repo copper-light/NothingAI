@@ -1,10 +1,14 @@
 import subprocess
 import os
+import logging
 from abc import abstractmethod
 
 from apps.experiments.models import Experiment
 from config import settings
 from common.utils import copy_files
+
+
+logger = logging.getLogger(__name__)
 
 
 class ExecService:
@@ -33,7 +37,12 @@ def prepare_experiment_env(model_id: int, dataset_id: int, exp_id: int) -> bool:
 
 def exec_experiment(experiment: Experiment, root_dir=settings.EXPERIMENTS_DIR) -> bool:
     working_dir = os.path.join(root_dir, str(experiment.id))
-    run_file = experiment.model.run_file_path
+    run_command = experiment.model.run_command
+    run_file = run_command.split(' ')
+    if len(run_file) < 1:
+        logger.info("Not found run file {}".format(run_file))
+        return False
+    run_file = run_file[0]
     if not os.path.exists(os.path.join(working_dir, run_file)):
         return False
 
